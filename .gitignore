@@ -1,0 +1,25 @@
+# ==============================================================
+#  Repository root — project-specific rules live in each app
+#  folder (see RaksiChaiyo/.gitignore)
+# ==============================================================
+
+# --- Dependencies (safety net) --------------------------------
+node_modules/
+
+# --- Environment variables ------------------------------------
+.env
+.env*.local
+
+# --- Editor -------------------------------------------------
+.idea/
+
+# --- AI assistant files (local only, never pushed) ------------
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+AGENTS.md
+
+# --- OS files -------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
