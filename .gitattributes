@@ -1,0 +1,10 @@
+# Normalize line endings to LF across all OSes (prevents CRLF warnings on Windows)
+* text=auto eol=lf
+
+# Binary assets — never touch
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ttf binary
+*.otf binary
