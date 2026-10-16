@@ -1,0 +1,10 @@
+{
+  "description": "Experience seamless beverage and snack delivery in Nepalgunj with an intuitive app that offers easy browsing, secure checkout, and age verification.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
