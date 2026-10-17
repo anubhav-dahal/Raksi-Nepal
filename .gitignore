@@ -12,6 +12,7 @@ node_modules/
 
 # --- Editor -------------------------------------------------
 .idea/
+.vscode/
 
 # --- AI assistant files (local only, never pushed) ------------
 .claude/
@@ -26,3 +27,4 @@ desktop.ini
 
 scripts/
 .md
+.vscode
