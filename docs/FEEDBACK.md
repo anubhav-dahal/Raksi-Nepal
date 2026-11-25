@@ -41,15 +41,10 @@ Bigger work should also get a GitHub issue. Put the issue number in the entry.
 - **Status:** Open
 - **What:** Pay with eSewa from the phone using the sandbox account (ID `9806800001`, password `Nepal@123`, OTP `123456`). Also cancel once on the eSewa page, then retry and use "pay cash instead".
 
-### FB-003: Splash image and app icon are still Expo's defaults
-- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** design
-- **Status:** Open
-- **What:** Export the logo (from the prototype) as PNGs for `RaksiChaiyo/assets/splash-icon.png`, `icon.png` and the Android adaptive icon.
-
-### FB-004: Product photos are linked from other websites
+### FB-004: Product photos are linked from other websites, and 16 products have none
 - **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** backend
 - **Status:** Open
-- **What:** Some images may stop loading. Put our own photos in `backend/public/images` and point the seed data at `/static/images/...`.
+- **What:** Beer now uses our own photo. The other 3 category photos and 8 product photos are still hot-linked and could stop loading. 16 products have no photo and show a monogram placeholder. Add our own packshots to `backend/public/images` and set each product's `image` in `backend/src/seed/catalogue.js` to `/static/images/<file>`.
 
 ### FB-005: Database resets every time the backend restarts
 - **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** backend
@@ -79,6 +74,44 @@ Bigger work should also get a GitHub issue. Put the issue number in the entry.
 ---
 
 ## Done
+
+### FB-017: App looked dull and flat
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** design
+- **Status:** Done, in `feat/phase-6-operations` (commit `08fa65a`)
+- **Fix:** Restyled to the prototype:
+  - dark by default, with a Dark / Light / Phone switch in Account
+  - teal glows on every screen and behind product shots
+  - category banner, product detail sheet, glowing buttons, card entrance animations
+
+### FB-018: Two layers of shade on the category thumbnails
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** design
+- **Status:** Done, in `feat/phase-6-operations` (commit `08fa65a`)
+- **Fix:** One smooth gradient instead of two overlapping dark boxes.
+
+### FB-019: Bottom of the app hidden on some phones
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P0 · **Area:** design
+- **Status:** Done, in `feat/phase-6-operations` (commit `08fa65a`). **Re-check on your phone.**
+- **Fix:** Every screen and bottom bar now pads for the Android navigation/gesture bar. Bottom buttons no longer touch the screen edges.
+
+### FB-020: App name is Nepalgunj Sips
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** design
+- **Status:** Done, in `feat/phase-6-operations` (commit `08fa65a`)
+- **Fix:** Name changed in the splash ("NEPALGUNJ / SIPS"), the header lockup and app.json. The prototype's glass logo is used in the app.
+
+### FB-003 / FB-021: App icon and splash were Expo's defaults
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** design
+- **Status:** Done, in `feat/phase-6-operations` (commit `08fa65a`)
+- **Fix:** The app icon is a square crop of the uploaded beer photo. The splash and favicon use the logo. Expo Go shows its own icon; the new icon appears in a real build.
+
+### FB-022: Checkout and product lists looked empty
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P0 · **Area:** checkout
+- **Status:** Done, in `feat/phase-6-operations` (commit `08fa65a`). **Re-check on your phone, and add a screenshot here if checkout is still empty.**
+- **Fix:** Most product photos were blank (one image host blocks apps), so the screens looked empty. Missing or failed photos now show a designed placeholder, and the Beer photo is served by our backend.
+
+### FB-023: Errors showing in Expo Go
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** other
+- **Status:** Done, in `feat/phase-6-operations` (commit `08fa65a`). **Re-check: list any error that still shows.**
+- **Fix:** The push notification package logged errors in Expo Go as soon as it loaded. It now only loads in real builds.
 
 ### FB-010: Smart Telecom numbers (96x) couldn't register or log in
 - **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P0 · **Area:** login
