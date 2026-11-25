@@ -80,7 +80,7 @@ export function ProductCard({ product, onPress, onAdd, index = 0 }: ProductCardP
         </View>
         <View className="gap-1 p-3 pb-4">
           <Text className="font-body text-micro text-muted">{first?.label}</Text>
-          <Text numberOfLines={1} className="font-heading text-[14px] text-text">
+          <Text numberOfLines={2} className="h-[38px] font-heading text-[14px] leading-[19px] text-text">
             {name}
           </Text>
           <Text className="font-display text-body text-accent">

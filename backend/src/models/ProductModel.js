@@ -24,7 +24,11 @@ const productSchema = new mongoose.Schema(
     {
         name: localizedText,
         slug: { type: String, required: true, unique: true, lowercase: true, trim: true },
-        description: localizedText,
+        // Optional; the app hides it when empty.
+        description: {
+            en: { type: String, trim: true, default: '' },
+            ne: { type: String, trim: true, default: '' },
+        },
         category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
         // Absolute URL, a /static/... path on this API, or '' (the app shows a placeholder).
         image: { type: String, default: '' },

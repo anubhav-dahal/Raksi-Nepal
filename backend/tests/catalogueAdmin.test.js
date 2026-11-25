@@ -159,6 +159,21 @@ describe('one admin', () => {
         } finally {
             delete process.env.ADMIN_PHONE;
             delete process.env.ADMIN_PASSWORD;
+            // Give the demo admin its role back for the tests that follow.
+            const { seedDemoStaff } = await import('../src/seed/staff.js');
+            await seedDemoStaff();
         }
+    });
+});
+
+describe('optional description', () => {
+    test('a product can be created without a description', async () => {
+        const admin = await loginStaff('admin');
+        const cats = (await request(app).get('/api/admin/categories').set(admin.auth)).body.data;
+        await request(app)
+            .post('/api/admin/products')
+            .set(admin.auth)
+            .send({ categoryId: cats[0].id, name: 'No Description Beer', image: '', variants: [{ label: '330 ml', price: 200, stock: 5 }] })
+            .expect(201);
     });
 });

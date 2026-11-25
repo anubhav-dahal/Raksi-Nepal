@@ -14,6 +14,7 @@ const startServer = async () => {
     if (isMemoryDB() && env.SEED_ON_START) {
         const counts = await seedDatabase();
         console.log(`Seeded ${counts.categories} categories and ${counts.products} products`);
+        if (counts.review.length) console.log(`(${counts.review.length} sizes listed twice in catalog.json: run npm run seed to see them)`);
         const admin = await seedDevStaff();
         console.log(`Admin login: ${admin.phone}${process.env.ADMIN_PASSWORD ? '' : ` / ${DEMO_STAFF[0].password} (demo)`}`);
         console.log(`Demo rider:  ${DEMO_STAFF[1].phone} / ${DEMO_STAFF[1].password}`);

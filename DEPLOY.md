@@ -31,7 +31,7 @@ docker run -d -p 5000:5000 --env-file backend/.env -v sips-uploads:/data/uploads
 ```
 **Without Docker:** `cd backend && npm ci --omit=dev && npm start`.
 
-**First run only:** `npm run seed` loads the starter catalogue. Skip it if the admin will add everything in the app. Then check `https://<api>/api/health`.
+**First run only:** `npm run seed` loads the shop catalogue from `backend/public/catalog` (8 categories, 80 products with photos). Add `-- --replace` to also hide anything else that's already in the database, such as old demo items. Then check `https://<api>/api/health`.
 
 Put the API behind HTTPS (most hosts do this for you). eSewa and the app stores expect HTTPS.
 
