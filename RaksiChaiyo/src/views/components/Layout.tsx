@@ -1,15 +1,43 @@
 import type { ReactNode } from 'react';
 import { Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Image } from 'expo-image';
-import { styled } from 'nativewind';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useColors } from '../theme';
+import { Glow } from './Glow';
 
-/** Full-screen page with the app background and safe-area padding. */
-export function Screen({ children, edges = ['top'] }: { children: ReactNode; edges?: ('top' | 'bottom')[] }) {
+type Edge = 'top' | 'bottom';
+
+/**
+ * Full-screen page: app background, the prototype's teal glow in the top-right
+ * corner, and padding for the status bar / Android navigation bar.
+ * Screens with their own <BottomBar> pass edges={['top']}.
+ */
+export function Screen({ children, edges = ['top', 'bottom'] }: { children: ReactNode; edges?: Edge[] }) {
+  const insets = useSafeAreaInsets();
+  const colors = useColors();
   return (
-    <SafeAreaView edges={edges} className="flex-1 bg-bg">
+    <View
+      className="flex-1 overflow-hidden bg-bg"
+      style={{
+        paddingTop: edges.includes('top') ? insets.top : 0,
+        paddingBottom: edges.includes('bottom') ? insets.bottom : 0,
+      }}
+    >
+      <Glow color={colors.accent} opacity={0.16} spread={0.6} style={{ width: 520, height: 520, top: -260, right: -230 }} />
       {children}
-    </SafeAreaView>
+    </View>
+  );
+}
+
+/**
+ * Bar pinned to the bottom (Add to cart, Place order...). Sits above the
+ * Android navigation / gesture bar, with side padding that can't be lost.
+ */
+export function BottomBar({ children }: { children: ReactNode }) {
+  const insets = useSafeAreaInsets();
+  return (
+    <View className="border-t border-border bg-bg px-gutter pt-3" style={{ paddingBottom: Math.max(insets.bottom, 12) + 4 }}>
+      {children}
+    </View>
   );
 }
 
@@ -32,6 +60,3 @@ export const padToEven = <T,>(items: T[] | undefined): (T | null)[] =>
 export function GridFiller() {
   return <View className="flex-1" />;
 }
-
-/** expo-image with className support. */
-export const RemoteImage = styled(Image, { className: 'style' });

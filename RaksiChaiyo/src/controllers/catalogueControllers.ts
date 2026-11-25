@@ -1,8 +1,12 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { fetchCategories, fetchProduct, fetchProducts } from '../models/api/catalogue';
+import { useT } from '../i18n';
+import { useCartStore } from '../models/stores/cartStore';
 import { usePrefsStore } from '../models/stores/prefsStore';
-import type { Category } from '../models/types';
+import { toast } from '../models/stores/toastStore';
+import type { Category, Product } from '../models/types';
+import { localize } from '../utils/format';
 import { useAsync } from './useAsync';
 
 /** Home: categories + the 18+ gate before opening an alcoholic category. */
@@ -40,13 +44,38 @@ export const useHomeController = () => {
 
 /** Product list for one category. Category info comes from the categories call. */
 export const useCategoryController = (slug: string) => {
+  const t = useT();
   const products = useAsync(() => fetchProducts(slug), [slug]);
   const categories = useAsync(fetchCategories, []);
   const category = categories.data?.find((c) => c.slug === slug);
+  const addToCart = useCartStore((s) => s.add);
+
+  /** The card's + button: one of the first in-stock size. */
+  const quickAdd = (product: Product) => {
+    const variant = product.variants.find((v) => v.stock > 0);
+    if (!variant) return;
+    const inCart = useCartStore.getState().items.find((i) => i.sku === variant.sku)?.quantity ?? 0;
+    if (inCart >= variant.stock) {
+      toast(t('product.maxReached', { count: variant.stock }), 'error');
+      return;
+    }
+    addToCart({
+      productId: product.id,
+      sku: variant.sku,
+      name: localize(product.name),
+      label: variant.label,
+      image: product.image,
+      price: variant.price,
+      quantity: 1,
+      maxQuantity: variant.stock,
+    });
+    toast(t('product.added', { name: localize(product.name) }));
+  };
 
   return {
     category,
     products,
+    quickAdd,
     openProduct: (id: string) => router.push({ pathname: '/product/[id]', params: { id } }),
   };
 };

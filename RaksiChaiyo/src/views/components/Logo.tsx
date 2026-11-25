@@ -3,7 +3,7 @@ import Svg, { Circle, Defs, LinearGradient, Path, Stop } from 'react-native-svg'
 // Glass-and-orbit mark from the prototype. Fixed brand colours (not themed).
 export function Logo({ size = 88 }: { size?: number }) {
   return (
-    <Svg width={size} height={size} viewBox="0 0 76 76" accessibilityLabel="RaksiChaiyo logo">
+    <Svg width={size} height={size} viewBox="0 0 76 76" accessibilityLabel="Nepalgunj Sips logo">
       <Defs>
         <LinearGradient id="glass" x1="0" x2="1" y1="0" y2="1">
           <Stop offset="0" stopColor="#79eadc" stopOpacity={0.95} />

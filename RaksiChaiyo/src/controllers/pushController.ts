@@ -1,30 +1,41 @@
+import { isRunningInExpoGo } from 'expo';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
-import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
 import { request } from '../models/api/client';
 import { useAuthStore } from '../models/stores/authStore';
 
-// Show notifications while the app is open too.
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowBanner: true,
-    shouldShowList: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
+// Remote push needs a development or store build: Expo Go (since SDK 53) and the
+// web preview don't support it, and merely loading expo-notifications there
+// prints warnings/errors. So the module is only loaded where push can work.
+const pushSupported = Platform.OS !== 'web' && !isRunningInExpoGo() && Device.isDevice;
 
-/**
- * Gets this device's Expo push token. Needs a real device and an EAS project id
- * (app.json > extra.eas.projectId, set by `eas init`). Remote push does not
- * work in Expo Go on Android; use a development build to test it.
- */
+type NotificationsModule = typeof import('expo-notifications');
+let notifications: NotificationsModule | null = null;
+const loadNotifications = (): NotificationsModule | null => {
+  if (!pushSupported) return null;
+  if (!notifications) {
+    notifications = require('expo-notifications') as NotificationsModule;
+    // Show notifications while the app is open too.
+    notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowBanner: true,
+        shouldShowList: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+      }),
+    });
+  }
+  return notifications;
+};
+
+/** This device's Expo push token. Needs an EAS project id (app.json > extra.eas.projectId, from `eas init`). */
 const getPushToken = async (): Promise<string | null> => {
+  const Notifications = loadNotifications();
   const projectId = Constants.expoConfig?.extra?.eas?.projectId as string | undefined;
-  if (!Device.isDevice || !projectId) return null;
+  if (!Notifications || !projectId) return null;
 
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('orders', {
@@ -55,6 +66,8 @@ export const usePushNotifications = () => {
   }, [token]);
 
   useEffect(() => {
+    const Notifications = loadNotifications();
+    if (!Notifications) return;
     const sub = Notifications.addNotificationResponseReceivedListener((response) => {
       const orderId = response.notification.request.content.data?.orderId;
       if (typeof orderId === 'string') router.push({ pathname: '/order/[id]', params: { id: orderId } });

@@ -9,7 +9,8 @@ import { StockBadge } from '../../components/Badge';
 import { Button } from '../../components/Button';
 import { Chip } from '../../components/Chip';
 import { Input } from '../../components/Input';
-import { Eyebrow, RemoteImage, Screen } from '../../components/Layout';
+import { Eyebrow, Screen } from '../../components/Layout';
+import { ProductImage } from '../../components/ProductImage';
 import { ErrorState, Skeleton } from '../../components/StateView';
 
 type StockReason = 'restock' | 'adjustment' | 'damaged';
@@ -108,7 +109,7 @@ export function AdminProductScreen({ id }: { id: string }) {
           <ScrollView contentContainerClassName="gap-4 px-gutter pb-10 pt-2" keyboardShouldPersistTaps="handled">
             <View className="flex-row items-center gap-3">
               <View className="h-20 w-20 rounded-md bg-card-2 p-2">
-                <RemoteImage source={p.image} contentFit="contain" className="h-full w-full" />
+                <ProductImage src={p.image} name={localize(p.name)} />
               </View>
               <View className="flex-1 gap-1">
                 <Text className="font-body text-caption text-muted">{localize(p.category.name)}</Text>

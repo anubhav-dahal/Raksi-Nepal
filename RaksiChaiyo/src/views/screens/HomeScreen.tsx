@@ -16,11 +16,12 @@ export function HomeScreen() {
   const colors = useColors();
   const { categories, openCategory, ageGate } = useHomeController();
 
+  // Prototype .hero-copy: eyebrow + big headline, delivery-time pill on the right.
   const header = (
-    <View className="mb-5 mt-2 flex-row items-end justify-between px-0.5">
+    <View className="mb-[22px] mt-2 flex-row items-end justify-between px-0.5">
       <View className="flex-1 gap-2">
         <Eyebrow>{t('home.eyebrow')}</Eyebrow>
-        <Text className="font-display text-hero leading-[33px] text-text">{t('home.title')}</Text>
+        <Text className="font-display text-hero leading-[33px] tracking-[-1px] text-text">{t('home.title')}</Text>
       </View>
       <Pill label={t('home.deliveryPill')} />
     </View>
@@ -31,14 +32,12 @@ export function HomeScreen() {
     body = (
       <View className="px-gutter">
         {header}
-        <View className="flex-row gap-3">
-          <Skeleton className="h-[230px] flex-1" />
-          <Skeleton className="h-[230px] flex-1" />
-        </View>
-        <View className="mt-3 flex-row gap-3">
-          <Skeleton className="h-[230px] flex-1" />
-          <Skeleton className="h-[230px] flex-1" />
-        </View>
+        {[0, 1].map((row) => (
+          <View key={row} className="mb-3 flex-row gap-3">
+            <Skeleton className="h-[230px] flex-1" />
+            <Skeleton className="h-[230px] flex-1" />
+          </View>
+        ))}
       </View>
     );
   } else if (categories.error && !categories.data) {
@@ -50,20 +49,16 @@ export function HomeScreen() {
         keyExtractor={(c) => c?.id ?? 'filler'}
         numColumns={2}
         columnWrapperClassName="gap-3"
-        contentContainerClassName="gap-3 px-gutter pb-10"
+        contentContainerClassName="gap-3 px-gutter pb-8"
         ListHeaderComponent={header}
         ListEmptyComponent={<EmptyState title={t('home.empty')} />}
         ListFooterComponent={
-          <Text className="mx-5 mt-5 text-center font-body text-caption leading-[16px] text-muted">
-            {t('home.responsible')}
-          </Text>
+          <Text className="mx-5 mt-4 text-center font-body text-caption leading-[16px] text-muted">{t('home.responsible')}</Text>
         }
-        renderItem={({ item }) =>
-          item ? <CategoryCard category={item} onPress={() => openCategory(item)} /> : <GridFiller />
+        renderItem={({ item, index }) =>
+          item ? <CategoryCard category={item} index={index} onPress={() => openCategory(item)} /> : <GridFiller />
         }
-        refreshControl={
-          <RefreshControl refreshing={categories.loading} onRefresh={categories.reload} tintColor={colors.accent} />
-        }
+        refreshControl={<RefreshControl refreshing={false} onRefresh={categories.reload} tintColor={colors.accent} />}
       />
     );
   }

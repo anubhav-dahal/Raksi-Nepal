@@ -12,6 +12,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useT } from '../../i18n';
+import { Glow } from '../components/Glow';
 import { Logo } from '../components/Logo';
 import { palette } from '../theme';
 
@@ -82,7 +83,7 @@ export function SplashView({ onDone, ready }: { onDone: () => void; ready: boole
       : [{ translateY: (1 - logo.value) * 20 }, { scale: 0.7 + 0.3 * logo.value }],
   }));
   const glowStyle = useAnimatedStyle(() => ({
-    opacity: 0.18 * (1 - 0.3 * glow.value),
+    opacity: 1 - 0.3 * glow.value,
     transform: [{ scale: 1 + 0.12 * glow.value }],
   }));
   const textStyle = useAnimatedStyle(() => ({
@@ -93,13 +94,15 @@ export function SplashView({ onDone, ready }: { onDone: () => void; ready: boole
 
   return (
     <Animated.View style={[StyleSheet.absoluteFill, styles.root, screenStyle]} accessibilityLabel={t('appName')}>
-      <Animated.View style={[styles.glow, glowStyle]} />
+      <Animated.View style={[styles.glow, glowStyle]}>
+        <Glow color={c.accent} opacity={0.3} spread={0.68} />
+      </Animated.View>
       <Animated.View style={logoStyle}>
         <Logo size={88} />
       </Animated.View>
       <Animated.View style={[styles.copy, textStyle]}>
-        <Text style={styles.eyebrow}>NEPALGUNJ</Text>
-        <Text style={styles.wordmark}>{t('appName').toUpperCase()}</Text>
+        <Text style={styles.eyebrow}>{t('brand.top').toUpperCase()}</Text>
+        <Text style={styles.wordmark}>{t('brand.bottom')}</Text>
         <Text style={styles.tagline}>{t('tagline')}</Text>
       </Animated.View>
       <View style={styles.loaderTrack}>
@@ -116,12 +119,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 310,
     height: 310,
-    borderRadius: 155,
-    backgroundColor: c.accent,
   },
   copy: { alignItems: 'center', marginTop: 12 },
   eyebrow: { color: c.accent, fontFamily: 'Manrope_800ExtraBold', fontSize: 10, letterSpacing: 3.2 },
-  wordmark: { color: c.text, fontFamily: 'Manrope_800ExtraBold', fontSize: 30, letterSpacing: 4, marginTop: 2 },
+  // Prototype .splash-copy h1: 43px, 0.2em spacing (the right margin balances the trailing letter space).
+  wordmark: { color: c.text, fontFamily: 'Manrope_800ExtraBold', fontSize: 43, letterSpacing: 8.6, marginTop: 1, marginRight: -8.6 },
   tagline: { color: c.muted, fontFamily: 'DMSans_400Regular', fontSize: 11, marginTop: 4 },
   loaderTrack: {
     position: 'absolute',

@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { useColorScheme, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { usePushNotifications } from '../controllers/pushController';
+import { useApplyTheme } from '../controllers/themeController';
 import { useAuthStore } from '../models/stores/authStore';
 import { ToastHost } from '../views/components/ToastHost';
 import { SplashView } from '../views/screens/SplashView';
@@ -33,6 +34,7 @@ export default function RootLayout() {
     DMSans_600SemiBold,
     DMSans_700Bold,
   });
+  useApplyTheme();
   usePushNotifications();
   const authHydrated = useAuthStore((s) => s.hydrated);
   const [waitedTooLong, setWaitedTooLong] = useState(false);

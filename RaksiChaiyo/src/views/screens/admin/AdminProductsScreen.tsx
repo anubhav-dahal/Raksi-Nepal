@@ -4,7 +4,8 @@ import { useT } from '../../../i18n';
 import { formatNpr, localize } from '../../../utils/format';
 import { AppHeader } from '../../components/AppHeader';
 import { LOW_STOCK } from '../../components/Badge';
-import { RemoteImage, Screen } from '../../components/Layout';
+import { Screen } from '../../components/Layout';
+import { ProductImage } from '../../components/ProductImage';
 import { ErrorState, Skeleton } from '../../components/StateView';
 import { useColors } from '../../theme';
 
@@ -42,7 +43,7 @@ export function AdminProductsScreen() {
               className={`flex-row items-center gap-3 rounded-lg border border-border bg-card p-2.5 active:opacity-80 ${p.isActive ? '' : 'opacity-60'}`}
             >
               <View className="h-12 w-12 rounded-sm bg-card-2 p-1">
-                <RemoteImage source={p.image} contentFit="contain" className="h-full w-full" />
+                <ProductImage src={p.image} name={localize(p.name)} />
               </View>
               <View className="flex-1 gap-0.5">
                 <Text numberOfLines={1} className="font-heading text-body text-text">

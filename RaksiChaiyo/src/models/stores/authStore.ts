@@ -1,4 +1,4 @@
-import * as SecureStore from 'expo-secure-store';
+import { tokenStorage } from './tokenStorage';
 import { create } from 'zustand';
 import * as authApi from '../api/auth';
 import { ApiError } from '../api/client';
@@ -21,7 +21,7 @@ type AuthState = {
 // The token lives in the phone's secure storage (Keychain / Keystore), not AsyncStorage.
 export const useAuthStore = create<AuthState>()((set, get) => {
   const signIn = async ({ token, user }: { token: string; user: User }) => {
-    await SecureStore.setItemAsync(TOKEN_KEY, token);
+    await tokenStorage.set(TOKEN_KEY, token);
     set({ token, user });
     return user;
   };
@@ -32,7 +32,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
     hydrated: false,
 
     hydrate: async () => {
-      const token = await SecureStore.getItemAsync(TOKEN_KEY).catch(() => null);
+      const token = await tokenStorage.get(TOKEN_KEY).catch(() => null);
       if (!token) return set({ hydrated: true });
       try {
         const user = await authApi.fetchMe(token);
@@ -40,7 +40,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
       } catch (e) {
         // Expired or revoked: forget it. Offline: keep the token and try later.
         if (e instanceof ApiError && e.status === 401) {
-          await SecureStore.deleteItemAsync(TOKEN_KEY).catch(() => {});
+          await tokenStorage.remove(TOKEN_KEY).catch(() => {});
           set({ hydrated: true });
         } else {
           set({ token, hydrated: true });
@@ -57,7 +57,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
     },
 
     logout: async () => {
-      await SecureStore.deleteItemAsync(TOKEN_KEY).catch(() => {});
+      await tokenStorage.remove(TOKEN_KEY).catch(() => {});
       set({ token: null, user: null });
     },
   };

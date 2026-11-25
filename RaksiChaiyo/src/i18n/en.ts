@@ -1,7 +1,9 @@
 // All UI text. Screens use t('key'), never hard-coded strings.
 // {name} placeholders are filled by t('key', { name: 'value' }).
 export const en = {
-  appName: 'RaksiChaiyo',
+  appName: 'Nepalgunj Sips',
+  'brand.top': 'Nepalgunj',
+  'brand.bottom': 'SIPS',
   tagline: 'Drinks, snacks & good moments',
   location: 'Nepalgunj, Nepal',
 
@@ -12,12 +14,13 @@ export const en = {
   'common.save': 'Save',
 
   'home.eyebrow': 'DELIVERED IN NEPALGUNJ',
-  'home.title': 'What are we\nsipping today?',
-  'home.deliveryPill': 'Delivering now',
-  'home.responsible': 'Alcohol is sold only to customers aged 18 or above. Please drink responsibly.',
+  'home.title': 'What are you\nsipping today?',
+  'home.deliveryPill': '25–40 min',
+  'home.responsible': 'Alcohol is intended for adults only. Please enjoy responsibly.',
   'home.empty': 'No categories yet',
 
   'category.eyebrow': 'OUR PICKS',
+  'category.heading': 'Choose your favourite',
   'category.items': '{count} items',
   'category.empty': 'Nothing in this category yet',
   'category.ageTag': '18+ · Enjoy responsibly',
@@ -49,7 +52,7 @@ export const en = {
   'age.confirm': "Yes, I'm 18+",
   'age.decline': 'Not now',
 
-  'auth.loginEyebrow': 'WELCOME BACK',
+  'auth.loginEyebrow': 'WELCOME TO NEPALGUNJ SIPS',
   'auth.loginTitle': 'Almost at your doorstep.',
   'auth.loginBody': 'Log in to confirm your delivery details and place your order.',
   'auth.registerEyebrow': 'NEW HERE?',
@@ -62,7 +65,7 @@ export const en = {
   'auth.passwordHint': 'At least 8 characters',
   'auth.login': 'Log in',
   'auth.register': 'Create account',
-  'auth.noAccount': 'New to RaksiChaiyo? Create an account',
+  'auth.noAccount': 'New to Nepalgunj Sips? Create an account',
   'auth.haveAccount': 'Already have an account? Log in',
   'auth.phoneInvalid': 'Enter a 10-digit mobile number (starting 96, 97 or 98)',
   'auth.passwordRequired': 'Enter your password',
@@ -157,6 +160,10 @@ export const en = {
   'account.noOrders': 'No orders yet',
   'account.logout': 'Log out',
   'account.language': 'Language',
+  'account.theme': 'Theme',
+  'theme.dark': 'Dark',
+  'theme.light': 'Light',
+  'theme.system': 'Phone',
 
   'confirm.cancelTitle': 'Cancel this order?',
   'confirm.cancelBody': 'The order will be cancelled and nothing will be delivered.',

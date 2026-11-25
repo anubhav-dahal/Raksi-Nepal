@@ -6,6 +6,7 @@ import { usePrefsStore } from '../../models/stores/prefsStore';
 import { formatNpr } from '../../utils/format';
 import { AppHeader } from '../components/AppHeader';
 import { Button } from '../components/Button';
+import { Chip } from '../components/Chip';
 import { Divider, Eyebrow, Screen } from '../components/Layout';
 import { OrderStatusBadge } from '../components/OrderStatusBadge';
 import { EmptyState, ErrorState, Skeleton } from '../components/StateView';
@@ -15,6 +16,8 @@ export function AccountScreen() {
   const c = useAccountController();
   const language = usePrefsStore((s) => s.language);
   const setLanguage = usePrefsStore((s) => s.setLanguage);
+  const theme = usePrefsStore((s) => s.theme);
+  const setTheme = usePrefsStore((s) => s.setTheme);
 
   if (!c.isLoggedIn) {
     return (
@@ -40,6 +43,14 @@ export function AccountScreen() {
             <Text className="font-body-bold text-caption uppercase text-accent">{c.user?.role}</Text>
           )}
           <Divider className="my-2" />
+          <View className="flex-row items-center justify-between">
+            <Text className="font-body text-label text-muted">{t('account.theme')}</Text>
+            <View className="flex-row gap-2">
+              {(['dark', 'light', 'system'] as const).map((mode) => (
+                <Chip key={mode} label={t(`theme.${mode}`)} selected={theme === mode} onPress={() => setTheme(mode)} />
+              ))}
+            </View>
+          </View>
           <View className="flex-row items-center justify-between">
             <Text className="font-body text-label text-muted">{t('account.language')}</Text>
             <View className="flex-row gap-2">

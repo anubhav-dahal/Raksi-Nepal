@@ -33,9 +33,12 @@ export function AppHeader({ title, back = title !== undefined, showCart = true, 
           </Text>
         </>
       ) : (
-        <View className="flex-1 flex-row items-center gap-2">
-          <Logo size={37} />
-          <Text className="font-display text-title text-text">{t('appName')}</Text>
+        <View className="flex-1 flex-row items-center gap-2" accessibilityLabel={t('appName')}>
+          <Logo size={40} />
+          <View>
+            <Text className="font-heading text-[15px] leading-[17px] text-text">{t('brand.top')}</Text>
+            <Text className="font-display text-caption tracking-[2.3px] text-accent">{t('brand.bottom')}</Text>
+          </View>
         </View>
       )}
       <View className="flex-row gap-2">

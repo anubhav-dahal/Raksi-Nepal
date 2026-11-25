@@ -43,6 +43,8 @@ export function Button({ label, onPress, variant = 'primary', icon, loading, dis
       className={`h-control flex-row items-center justify-center gap-2 rounded-md px-5 ${box[variant]} ${
         inactive ? 'opacity-60' : ''
       } ${className}`}
+      // Prototype .button--primary: soft teal glow under the main action.
+      style={variant === 'primary' && !inactive ? { boxShadow: '0 12px 28px rgba(33,184,166,0.32)' } : undefined}
     >
       {loading ? <ActivityIndicator color={fg} /> : icon ? <Icon name={icon} size={19} color={fg} /> : null}
       <Text className={`font-heading text-body ${text[variant]}`}>{label}</Text>

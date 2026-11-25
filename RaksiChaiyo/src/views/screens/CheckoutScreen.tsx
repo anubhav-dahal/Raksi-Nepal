@@ -1,6 +1,5 @@
 import { router } from 'expo-router';
 import { KeyboardAvoidingView, ScrollView, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCheckoutController } from '../../controllers/checkoutController';
 import { payWithEsewa } from '../../controllers/paymentController';
 import { useT } from '../../i18n';
@@ -9,7 +8,7 @@ import { AppHeader } from '../components/AppHeader';
 import { Button } from '../components/Button';
 import { CartItemRow, SummaryCard } from '../components/Cards';
 import { Input } from '../components/Input';
-import { Eyebrow, Screen } from '../components/Layout';
+import { BottomBar, Eyebrow, Screen } from '../components/Layout';
 import { PaymentOption } from '../components/PaymentOption';
 import { EmptyState, ErrorState, Skeleton } from '../components/StateView';
 
@@ -36,7 +35,7 @@ export function CheckoutScreen() {
   }
 
   return (
-    <Screen>
+    <Screen edges={c.isLoggedIn ? ['top'] : ['top', 'bottom']}>
       <AppHeader title={t('checkout.title')} showCart={false} />
       <KeyboardAvoidingView behavior="padding" className="flex-1">
         <ScrollView contentContainerClassName="gap-3 px-gutter pb-8 pt-2" keyboardShouldPersistTaps="handled">
@@ -124,9 +123,8 @@ export function CheckoutScreen() {
       </KeyboardAvoidingView>
 
       {c.isLoggedIn && (
-        <SafeAreaView edges={['bottom']} className="border-t border-border bg-bg px-gutter pt-3">
+        <BottomBar>
           <Button
-            className="mb-2"
             label={t(c.paymentMethod === 'esewa' ? 'checkout.payEsewa' : 'checkout.placeOrder', {
               total: q ? formatNpr(q.total) : '…',
             })}
@@ -134,7 +132,7 @@ export function CheckoutScreen() {
             disabled={!c.canPlace}
             onPress={c.placeOrder}
           />
-        </SafeAreaView>
+        </BottomBar>
       )}
     </Screen>
   );

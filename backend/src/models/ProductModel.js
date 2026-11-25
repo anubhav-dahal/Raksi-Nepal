@@ -26,7 +26,8 @@ const productSchema = new mongoose.Schema(
         slug: { type: String, required: true, unique: true, lowercase: true, trim: true },
         description: localizedText,
         category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
-        image: { type: String, required: true },
+        // Absolute URL, a /static/... path on this API, or '' (the app shows a placeholder).
+        image: { type: String, default: '' },
         alcoholic: { type: Boolean, default: false },
         variants: {
             type: [variantSchema],

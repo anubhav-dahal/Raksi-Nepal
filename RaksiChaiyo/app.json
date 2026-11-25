@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "RaksiChaiyo",
+    "name": "Nepalgunj Sips",
     "slug": "RaksiChaiyo",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,13 +13,14 @@
       "adaptiveIcon": {
         "backgroundColor": "#0b132b",
         "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "backgroundImage": "./assets/android-icon-background.png"
       },
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "name": "Nepalgunj Sips",
+      "backgroundColor": "#0b132b"
     },
     "plugins": [
       "expo-font",
