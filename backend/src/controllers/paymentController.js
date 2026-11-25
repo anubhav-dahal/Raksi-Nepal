@@ -67,8 +67,10 @@ export const esewaPayPage = async (req, res) => {
     }
 
     const base = `${baseUrl(req)}/api/payments/esewa`;
+    // Items and delivery are sent separately; their sum is the order total eSewa charges.
     const form = buildPaymentForm({
-        amount: order.total,
+        amount: order.total - order.deliveryFee,
+        deliveryCharge: order.deliveryFee,
         transactionUuid: session.tx,
         successUrl: `${base}/success/${req.params.token}`,
         failureUrl: `${base}/failure/${req.params.token}`,

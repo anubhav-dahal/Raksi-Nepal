@@ -41,11 +41,6 @@ Bigger work should also get a GitHub issue. Put the issue number in the entry.
 - **Status:** Open
 - **What:** Pay with eSewa from the phone using the sandbox account (ID `9806800001`, password `Nepal@123`, OTP `123456`). Also cancel once on the eSewa page, then retry and use "pay cash instead".
 
-### FB-004: Product photos are linked from other websites, and 16 products have none
-- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** backend
-- **Status:** Open
-- **What:** Beer now uses our own photo. The other 3 category photos and 8 product photos are still hot-linked and could stop loading. 16 products have no photo and show a monogram placeholder. Add our own packshots to `backend/public/images` and set each product's `image` in `backend/src/seed/catalogue.js` to `/static/images/<file>`.
-
 ### FB-005: Database resets every time the backend restarts
 - **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** backend
 - **Status:** Open
@@ -74,6 +69,21 @@ Bigger work should also get a GitHub issue. Put the issue number in the entry.
 ---
 
 ## Done
+
+### FB-030: eSewa should fill in the payment amount automatically
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** payment
+- **Status:** Done, in `fix/feedback-esewa-wine`
+- **Finding:** The amount was already filled in. Checked on eSewa's sandbox: the eSewa page shows "Total Amount NPR 1,395.00" from our order, and the customer only signs in. They can't type or change the amount.
+- **Improvement:** We now send the items amount and the delivery fee separately (eSewa checks they add up to the total), so eSewa's "Details" shows the breakdown.
+
+### FB-031: Wine pictures (new download with its JSON)
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** browse
+- **Status:** Done, in `fix/feedback-esewa-wine`
+- **Fix:** The 21 new wine photos were added to `backend/public/catalog/wine/` with the white background removed, and the wine rows in `catalog.json` point to them. The Wine tile now shows real bottles. Prices are unchanged, and no source links or third-party marks were added.
+
+### FB-004: Product photos were linked from other websites / missing
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** backend
+- **Status:** Done. All 80 products and 8 categories now use our own photos in `backend/public/catalog` (`dabd9a2`, plus wine in `fix/feedback-esewa-wine`).
 
 ### FB-024: Remove the arrow icon from the category grid
 - **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P2 · **Area:** design

@@ -72,6 +72,10 @@ describe('eSewa payments', () => {
         assert.match(page.text, /action="https:\/\/rc-epay\.esewa\.com\.np\/api\/epay\/main\/v2\/form"/);
         assert.match(page.text, new RegExp(`name="transaction_uuid" value="${tx}"`));
         assert.match(page.text, new RegExp(`name="total_amount" value="${order.total}"`));
+        // Amounts are filled in for the customer: items and delivery shown separately, adding up to the total.
+        assert.match(page.text, new RegExp(`name="amount" value="${order.subtotal}"`));
+        assert.match(page.text, new RegExp(`name="product_delivery_charge" value="${order.deliveryFee}"`));
+        assert.equal(order.subtotal + order.deliveryFee, order.total);
         const signature = sign(`total_amount=${order.total},transaction_uuid=${tx},product_code=EPAYTEST`);
         assert.ok(page.text.includes(`value="${signature}"`));
     });

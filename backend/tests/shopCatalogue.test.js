@@ -65,6 +65,7 @@ describe('shop catalogue data', () => {
             assert.ok(fs.existsSync(path.join(PUBLIC, item.image.replace('/static/', ''))), `missing ${item.image}`);
         }
         assert.ok(shop.categories.every((c) => c.image), 'every category has a cover');
+        assert.deepEqual(shop.products.filter((p) => !p.image).map((p) => p.name.en), [], 'every product has a photo (incl. wine)');
         const text = fs.readFileSync(path.join(PUBLIC, 'catalog', 'catalog.json'), 'utf8');
         assert.doesNotMatch(text, /fasto|https?:\/\//i);
         assert.doesNotMatch(text, /[ऀ-ॿ]/, 'no Nepali script');

@@ -9,16 +9,21 @@ import { env } from '../config/env.js';
 export const sign = (message) =>
     crypto.createHmac('sha256', env.ESEWA_SECRET_KEY).update(message).digest('base64');
 
-/** Fields for the payment form. Amounts are whole NPR. */
-export const buildPaymentForm = ({ amount, transactionUuid, successUrl, failureUrl }) => {
+/**
+ * Fields for the payment form. Amounts are whole NPR. The order's amounts are
+ * filled in for the customer (they can't change them on eSewa): `amount` is the
+ * items, `deliveryCharge` the delivery fee, shown separately under "Details".
+ * eSewa checks that amount + tax + service + delivery = total.
+ */
+export const buildPaymentForm = ({ amount, deliveryCharge = 0, transactionUuid, successUrl, failureUrl }) => {
     const fields = {
         amount: String(amount),
         tax_amount: '0',
-        total_amount: String(amount),
+        total_amount: String(amount + deliveryCharge),
         transaction_uuid: transactionUuid,
         product_code: env.ESEWA_PRODUCT_CODE,
         product_service_charge: '0',
-        product_delivery_charge: '0',
+        product_delivery_charge: String(deliveryCharge),
         success_url: successUrl,
         failure_url: failureUrl,
         signed_field_names: 'total_amount,transaction_uuid,product_code',
