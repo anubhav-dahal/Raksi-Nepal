@@ -57,3 +57,23 @@ describe('auth', () => {
         await request(app).get('/api/users/me').set({ Authorization: 'Bearer garbage' }).expect(401);
     });
 });
+
+describe('phone numbers', () => {
+    test('accepts Smart Telecom (96x) and normalises +977, spaces and dashes', async () => {
+        const res = await request(app)
+            .post('/api/users/register')
+            .send({ name: 'Smart User', phone: '+977 961-2345678', password: 'password123' })
+            .expect(201);
+        assert.equal(res.body.data.user.phone, '9612345678');
+
+        // Log in with the plain number, and with the formatted one.
+        await request(app).post('/api/users/login').send({ phone: '9612345678', password: 'password123' }).expect(200);
+        await request(app).post('/api/users/login').send({ phone: '977-9612345678', password: 'password123' }).expect(200);
+    });
+
+    test('still rejects numbers that are not Nepali mobiles', async () => {
+        for (const phone of ['9512345678', '981234567', '01-4412345']) {
+            await request(app).post('/api/users/register').send({ name: 'X Y', phone, password: 'password123' }).expect(400);
+        }
+    });
+});

@@ -1,9 +1,10 @@
 import { z } from 'zod';
 import { signToken } from '../middleware/requireAuth.js';
-import { PHONE_PATTERN, User } from '../models/UserModel.js';
+import { User } from '../models/UserModel.js';
 import { ApiError } from '../utils/ApiError.js';
+import { phoneField } from '../utils/phone.js';
 
-const phone = z.string().trim().regex(PHONE_PATTERN, 'must be a 10-digit mobile number starting with 97 or 98');
+const phone = phoneField();
 const password = z.string().min(8, 'must be at least 8 characters').max(72);
 
 export const registerSchema = {

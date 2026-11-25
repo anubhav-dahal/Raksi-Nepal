@@ -1,5 +1,5 @@
 import { router, useFocusEffect } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Linking } from 'react-native';
 import { useT } from '../i18n';
 import { cancelOrder, fetchMyOrders, fetchOrder, payOnDelivery } from '../models/api/orders';
@@ -102,6 +102,11 @@ export const useAccountController = () => {
   const token = useAuthStore((s) => s.token);
   const logout = useAuthStore((s) => s.logout);
   const orders = useAsync(() => (token ? withAuth(fetchMyOrders) : Promise.resolve([])), [token]);
+
+  // Logged in but the profile didn't load (app started while offline): load it now.
+  useEffect(() => {
+    if (token && !user) useAuthStore.getState().refreshUser().catch(handleAuthError);
+  }, [token, user]);
 
   return {
     user,

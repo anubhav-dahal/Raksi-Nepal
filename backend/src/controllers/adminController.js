@@ -3,7 +3,8 @@ import { z } from 'zod';
 import { ORDER_STATUSES, Order } from '../models/OrderModel.js';
 import { Product } from '../models/ProductModel.js';
 import { StockMovement } from '../models/StockMovementModel.js';
-import { PHONE_PATTERN, ROLES, User } from '../models/UserModel.js';
+import { ROLES, User } from '../models/UserModel.js';
+import { phoneField } from '../utils/phone.js';
 import { ACTIVE_STATUSES } from '../services/orderStatusService.js';
 import { changeStock } from '../services/stockService.js';
 import { ApiError } from '../utils/ApiError.js';
@@ -189,7 +190,7 @@ export const listStockMovements = async (req, res) => {
 
 export const setRoleSchema = {
     body: z.object({
-        phone: z.string().trim().regex(PHONE_PATTERN, 'must be a 10-digit mobile number'),
+        phone: phoneField(),
         role: z.enum(ROLES),
     }),
 };

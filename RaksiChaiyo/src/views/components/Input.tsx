@@ -21,7 +21,7 @@ export function Input({ label, value, onChangeText, type = 'text', error, hint, 
 
   const typeProps: TextInputProps =
     type === 'phone'
-      ? { keyboardType: 'number-pad', maxLength: 10, autoComplete: 'tel', textContentType: 'telephoneNumber' }
+      ? { keyboardType: 'phone-pad', maxLength: 16, autoComplete: 'tel', textContentType: 'telephoneNumber' }
       : type === 'email'
         ? { keyboardType: 'email-address', autoCapitalize: 'none', autoComplete: 'email' }
         : type === 'password'

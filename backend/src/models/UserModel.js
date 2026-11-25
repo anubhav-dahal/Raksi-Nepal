@@ -1,10 +1,10 @@
 import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
+import { PHONE_PATTERN } from '../utils/phone.js';
 
 export const ROLES = ['customer', 'admin', 'rider'];
 
-// Nepali mobile numbers: 10 digits starting with 97 or 98.
-export const PHONE_PATTERN = /^9[78]\d{8}$/;
+export { PHONE_PATTERN };
 
 const addressSchema = new mongoose.Schema(
     {

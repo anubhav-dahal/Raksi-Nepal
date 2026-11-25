@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { z } from 'zod';
 import { ORDER_STATUSES, Order, PAYMENT_METHODS } from '../models/OrderModel.js';
-import { PHONE_PATTERN } from '../models/UserModel.js';
+import { phoneField } from '../utils/phone.js';
 import { changeStatus } from '../services/orderStatusService.js';
 import { placeOrder, quote } from '../services/orderService.js';
 import { ApiError } from '../utils/ApiError.js';
@@ -18,7 +18,7 @@ const itemsSchema = z
 
 const addressSchema = z.object({
     name: z.string().trim().min(2).max(80),
-    phone: z.string().trim().regex(PHONE_PATTERN, 'must be a 10-digit mobile number starting with 97 or 98'),
+    phone: phoneField(),
     address: z.string().trim().min(5, 'please enter your full address').max(200),
     landmark: z.string().trim().max(120).optional().default(''),
     note: z.string().trim().max(200).optional().default(''),

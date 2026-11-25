@@ -17,10 +17,11 @@ import { ApiError } from '../utils/ApiError.js';
 
 const router = Router();
 
-// Slow down password guessing: 10 attempts per 15 minutes per IP.
+// Slow down password guessing: 10 attempts per 15 minutes per IP in production.
+// Looser in development so testing on a phone doesn't lock you out.
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    limit: 10,
+    limit: env.NODE_ENV === 'production' ? 10 : 100,
     standardHeaders: 'draft-8',
     legacyHeaders: false,
     skip: () => env.NODE_ENV === 'test',

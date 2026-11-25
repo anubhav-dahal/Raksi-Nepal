@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCheckoutController } from '../../controllers/checkoutController';
 import { payWithEsewa } from '../../controllers/paymentController';
@@ -38,7 +38,7 @@ export function CheckoutScreen() {
   return (
     <Screen>
       <AppHeader title={t('checkout.title')} showCart={false} />
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+      <KeyboardAvoidingView behavior="padding" className="flex-1">
         <ScrollView contentContainerClassName="gap-3 px-gutter pb-8 pt-2" keyboardShouldPersistTaps="handled">
           <Eyebrow>{t('checkout.summary')}</Eyebrow>
           {c.items.map((item) => (

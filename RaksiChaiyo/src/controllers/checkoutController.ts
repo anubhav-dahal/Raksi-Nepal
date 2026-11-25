@@ -9,7 +9,7 @@ import { useCartStore } from '../models/stores/cartStore';
 import { useCheckoutStore } from '../models/stores/checkoutStore';
 import { toast } from '../models/stores/toastStore';
 import type { Address, Order, PaymentMethod } from '../models/types';
-import { PHONE_PATTERN } from './authController';
+import { isValidPhone, normalizePhone } from '../utils/phone';
 import { errorMessage } from './errors';
 import { useAsync } from './useAsync';
 
@@ -48,6 +48,11 @@ export const useCheckoutController = (opts: { onPlaced?: (order: Order) => Promi
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cod');
   const [placing, setPlacing] = useState(false);
 
+  // Logged in but the profile didn't load (app started while offline): load it now.
+  useEffect(() => {
+    if (token && !user) useAuthStore.getState().refreshUser().catch(handleAuthError);
+  }, [token, user]);
+
   // Pre-fill from the last order, or at least the account's name and phone.
   useEffect(() => {
     if (!user) return;
@@ -66,7 +71,7 @@ export const useCheckoutController = (opts: { onPlaced?: (order: Order) => Promi
   const validateAddress = () => {
     const errors: AddressErrors = {};
     if (address.name.trim().length < 2) errors.name = t('checkout.nameRequired');
-    if (!PHONE_PATTERN.test(address.phone.trim())) errors.phone = t('auth.phoneInvalid');
+    if (!isValidPhone(address.phone)) errors.phone = t('auth.phoneInvalid');
     if (address.address.trim().length < 5) errors.address = t('checkout.addressRequired');
     setAddressErrors(errors);
     return Object.keys(errors).length === 0;
@@ -85,7 +90,7 @@ export const useCheckoutController = (opts: { onPlaced?: (order: Order) => Promi
         items: items.map(({ sku, quantity }) => ({ sku, quantity })),
         address: {
           name: address.name.trim(),
-          phone: address.phone.trim(),
+          phone: normalizePhone(address.phone),
           address: address.address.trim(),
           landmark: address.landmark?.trim() ?? '',
           note: address.note?.trim() ?? '',
@@ -94,11 +99,13 @@ export const useCheckoutController = (opts: { onPlaced?: (order: Order) => Promi
         expectedTotal: quote.data.total,
       });
 
-      if (buyNowItem) useCheckoutStore.getState().startCartCheckout();
-      else clearCart();
-
+      // Leave checkout first, then empty the cart, so the checkout screen
+      // never flashes "Nothing to check out" (or sits empty behind eSewa).
       if (opts.onPlaced) await opts.onPlaced(order);
       else router.replace({ pathname: '/order/[id]', params: { id: order.id } });
+
+      if (buyNowItem) useCheckoutStore.getState().startCartCheckout();
+      else clearCart();
     } catch (e) {
       handleAuthError(e);
       if (e instanceof ApiError && (e.code === 'PRICE_CHANGED' || e.code === 'CONFLICT')) {

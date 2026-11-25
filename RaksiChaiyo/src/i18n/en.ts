@@ -64,7 +64,7 @@ export const en = {
   'auth.register': 'Create account',
   'auth.noAccount': 'New to RaksiChaiyo? Create an account',
   'auth.haveAccount': 'Already have an account? Log in',
-  'auth.phoneInvalid': 'Enter a 10-digit number starting with 97 or 98',
+  'auth.phoneInvalid': 'Enter a 10-digit mobile number (starting 96, 97 or 98)',
   'auth.passwordRequired': 'Enter your password',
   'auth.passwordShort': 'Use at least 8 characters',
   'auth.nameRequired': 'Enter your name',
@@ -244,7 +244,7 @@ export const en = {
   'rider.pickedUpToast': 'Marked on the way',
   'rider.deliveredToast': 'Marked delivered',
 
-  'error.network': 'Cannot reach the server. Check your connection.',
+  'error.network': 'Cannot reach the server at {url}. Is the backend running, and is the phone on the same Wi-Fi?',
   'error.timeout': 'The server is taking too long. Try again.',
 } as const;
 

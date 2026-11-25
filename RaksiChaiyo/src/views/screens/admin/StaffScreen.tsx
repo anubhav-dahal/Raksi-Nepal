@@ -26,7 +26,7 @@ export function StaffScreen() {
             <Chip key={r} label={t(`admin.role.${r}` as StringKey)} selected={c.role === r} onPress={() => c.setRole(r)} />
           ))}
         </View>
-        <Button label={t('admin.saveRole')} loading={c.busy === 'role'} disabled={c.phone.trim().length !== 10} onPress={c.submit} />
+        <Button label={t('admin.saveRole')} loading={c.busy === 'role'} disabled={!c.canSubmit} onPress={c.submit} />
 
         <View className="mt-2 gap-2">
           <Eyebrow>{t('admin.riders')}</Eyebrow>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, Text, View } from 'react-native';
 import { useAdminProduct } from '../../../controllers/staffControllers';
 import { useT, type StringKey } from '../../../i18n';
 import type { AdminProduct, Variant } from '../../../models/types';
@@ -104,7 +104,7 @@ export function AdminProductScreen({ id }: { id: string }) {
       ) : !p ? (
         <Skeleton className="m-gutter h-64" />
       ) : (
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+        <KeyboardAvoidingView behavior="padding" className="flex-1">
           <ScrollView contentContainerClassName="gap-4 px-gutter pb-10 pt-2" keyboardShouldPersistTaps="handled">
             <View className="flex-row items-center gap-3">
               <View className="h-20 w-20 rounded-md bg-card-2 p-2">

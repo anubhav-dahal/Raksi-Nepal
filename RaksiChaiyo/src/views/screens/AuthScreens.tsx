@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Pressable, ScrollView, Text, View } from 'react-native';
 import { useLoginController, useRegisterController } from '../../controllers/authController';
 import { useT } from '../../i18n';
 import { AppHeader } from '../components/AppHeader';
@@ -12,7 +12,7 @@ function AuthLayout({ eyebrow, title, body, children }: { eyebrow: string; title
   return (
     <Screen>
       <AppHeader back showCart={false} />
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+      <KeyboardAvoidingView behavior="padding" className="flex-1">
         <ScrollView contentContainerClassName="gap-4 px-6 pb-10" keyboardShouldPersistTaps="handled">
           <View className="items-center gap-2">
             <Logo size={64} />

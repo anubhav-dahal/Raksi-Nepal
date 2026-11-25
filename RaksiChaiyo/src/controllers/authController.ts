@@ -4,9 +4,10 @@ import { useT } from '../i18n';
 import { ApiError } from '../models/api/client';
 import { useAuthStore } from '../models/stores/authStore';
 import { toast } from '../models/stores/toastStore';
+import { isValidPhone, normalizePhone } from '../utils/phone';
 import { errorMessage } from './errors';
 
-export const PHONE_PATTERN = /^9[78]\d{8}$/;
+export { PHONE_PATTERN } from '../utils/phone';
 
 type Errors = Partial<Record<'name' | 'phone' | 'email' | 'password' | 'form', string>>;
 
@@ -34,14 +35,14 @@ export const useLoginController = () => {
 
   const submit = async () => {
     const next: Errors = {};
-    if (!PHONE_PATTERN.test(phone.trim())) next.phone = t('auth.phoneInvalid');
+    if (!isValidPhone(phone)) next.phone = t('auth.phoneInvalid');
     if (!password) next.password = t('auth.passwordRequired');
     setErrors(next);
     if (Object.keys(next).length) return;
 
     setSubmitting(true);
     try {
-      const user = await login(phone.trim(), password);
+      const user = await login(normalizePhone(phone), password);
       toast(t('auth.welcome', { name: user.name.split(' ')[0] }));
       leave();
     } catch (e) {
@@ -76,7 +77,7 @@ export const useRegisterController = () => {
   const submit = async () => {
     const next: Errors = {};
     if (name.trim().length < 2) next.name = t('auth.nameRequired');
-    if (!PHONE_PATTERN.test(phone.trim())) next.phone = t('auth.phoneInvalid');
+    if (!isValidPhone(phone)) next.phone = t('auth.phoneInvalid');
     if (email && !/^\S+@\S+\.\S+$/.test(email.trim())) next.email = t('auth.emailInvalid');
     if (password.length < 8) next.password = t('auth.passwordShort');
     setErrors(next);
@@ -86,7 +87,7 @@ export const useRegisterController = () => {
     try {
       const user = await register({
         name: name.trim(),
-        phone: phone.trim(),
+        phone: normalizePhone(phone),
         email: email.trim() || undefined,
         password,
       });

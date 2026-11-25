@@ -8,6 +8,7 @@ import { useAuthStore } from '../models/stores/authStore';
 import { toast } from '../models/stores/toastStore';
 import type { OrderStatus, Role, StaffOrder } from '../models/types';
 import { localize } from '../utils/format';
+import { isValidPhone, normalizePhone } from '../utils/phone';
 import { errorMessage } from './errors';
 import { withAuth } from './orderControllers';
 import { useAsync } from './useAsync';
@@ -189,8 +190,9 @@ export const useStaffRoles = () => {
     setRole,
     busy,
     riders,
+    canSubmit: isValidPhone(phone),
     submit: async () => {
-      const ok = await run('role', () => withAuth((token) => staff.setStaffRole(token, phone.trim(), role)), t('admin.roleSaved'));
+      const ok = await run('role', () => withAuth((token) => staff.setStaffRole(token, normalizePhone(phone), role)), t('admin.roleSaved'));
       if (ok) {
         setPhone('');
         riders.reload();
