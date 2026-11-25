@@ -21,6 +21,7 @@ jobs:
       - run: npm ci
       - run: npm run lint --if-present
       - run: find src -name "*.js" | xargs -n1 node --check
+      - run: npm test
 
   mobile:
     runs-on: ubuntu-latest
