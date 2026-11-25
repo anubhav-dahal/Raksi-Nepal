@@ -7,8 +7,10 @@ import { IconButton } from './IconButton';
 import { Logo } from './Logo';
 
 type Props = {
-  /** No title = home header with the logo. */
+  /** No title and no `back` = home header with the logo. */
   title?: string;
+  /** Show the back button (on by default when there is a title). */
+  back?: boolean;
   /** Hide the cart button (e.g. on the cart screen itself). */
   showCart?: boolean;
   /** Extra button(s) left of the cart. */
@@ -17,17 +19,17 @@ type Props = {
 };
 
 /** Top bar (component inventory #12). */
-export function AppHeader({ title, showCart = true, right, onBack }: Props) {
+export function AppHeader({ title, back = title !== undefined, showCart = true, right, onBack }: Props) {
   const t = useT();
   const count = useCartCount();
 
   return (
     <View className="flex-row items-center gap-3 px-gutter pb-2 pt-2">
-      {title ? (
+      {back ? (
         <>
           <IconButton icon="back" accessibilityLabel={t('common.back')} onPress={onBack ?? (() => router.back())} />
           <Text numberOfLines={1} className="flex-1 font-heading text-title text-text">
-            {title}
+            {title ?? ''}
           </Text>
         </>
       ) : (

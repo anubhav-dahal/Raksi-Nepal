@@ -6,7 +6,9 @@ import { fileURLToPath } from 'node:url';
 import { env } from './config/env.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import CategoryRouter from './routes/CategoryRouter.js';
+import OrderRouter from './routes/OrderRouter.js';
 import ProductRouter from './routes/ProductRouter.js';
+import UserRouter from './routes/UserRouter.js';
 
 const publicDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'public');
 
@@ -27,6 +29,8 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/categories', CategoryRouter);
 app.use('/api/products', ProductRouter);
+app.use('/api/users', UserRouter);
+app.use('/api/orders', OrderRouter);
 
 app.use(notFound);
 app.use(errorHandler);

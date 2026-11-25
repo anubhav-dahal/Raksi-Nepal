@@ -13,6 +13,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { useColorScheme, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useAuthStore } from '../models/stores/authStore';
 import { ToastHost } from '../views/components/ToastHost';
 import { SplashView } from '../views/screens/SplashView';
 import { useColors } from '../views/theme';
@@ -31,18 +32,26 @@ export default function RootLayout() {
     DMSans_600SemiBold,
     DMSans_700Bold,
   });
-  const ready = fontsLoaded || !!fontError;
+  const authHydrated = useAuthStore((s) => s.hydrated);
+  const [waitedTooLong, setWaitedTooLong] = useState(false);
+  const fontsReady = fontsLoaded || !!fontError;
+  // Spec: leave the splash after 6 s at most, even if the login check is slow.
+  const ready = fontsReady && (authHydrated || waitedTooLong);
 
   // The animated splash is drawn under the native one, so hiding the
   // native splash right away swaps them with no visible change.
   useEffect(() => {
     SplashScreen.hideAsync();
+    // Check the saved login while the splash plays.
+    useAuthStore.getState().hydrate();
+    const timer = setTimeout(() => setWaitedTooLong(true), 6000);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
     <SafeAreaProvider>
       <View style={{ flex: 1, backgroundColor: colors.bg }}>
-        {ready && (
+        {fontsReady && (
           <Stack
             screenOptions={{
               headerShown: false,

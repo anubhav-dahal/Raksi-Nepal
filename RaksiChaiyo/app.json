@@ -32,7 +32,8 @@
           "imageWidth": 120
         }
       ],
-      "expo-image"
+      "expo-image",
+      "expo-secure-store"
     ],
     "scheme": "raksichaiyo",
     "backgroundColor": "#0b132b",

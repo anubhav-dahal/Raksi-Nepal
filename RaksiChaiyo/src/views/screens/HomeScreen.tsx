@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { FlatList, RefreshControl, Text, View } from 'react-native';
 import { useHomeController } from '../../controllers/catalogueControllers';
 import { useT } from '../../i18n';
@@ -5,6 +6,7 @@ import { AgeGateModal } from '../components/AgeGateModal';
 import { AppHeader } from '../components/AppHeader';
 import { Pill } from '../components/Badge';
 import { CategoryCard } from '../components/Cards';
+import { IconButton } from '../components/IconButton';
 import { Eyebrow, GridFiller, padToEven, Screen } from '../components/Layout';
 import { EmptyState, ErrorState, Skeleton } from '../components/StateView';
 import { useColors } from '../theme';
@@ -68,7 +70,9 @@ export function HomeScreen() {
 
   return (
     <Screen>
-      <AppHeader />
+      <AppHeader
+        right={<IconButton icon="user" accessibilityLabel={t('account.title')} onPress={() => router.push('/account')} />}
+      />
       {body}
       <AgeGateModal visible={ageGate.visible} onConfirm={ageGate.confirm} onDecline={ageGate.decline} />
     </Screen>

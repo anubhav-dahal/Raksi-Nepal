@@ -33,6 +33,75 @@ export type Product = {
   variants: Variant[];
 };
 
+export type Role = 'customer' | 'admin' | 'rider';
+
+export type Address = {
+  name: string;
+  phone: string;
+  address: string;
+  landmark?: string;
+  note?: string;
+};
+
+export type User = {
+  id: string;
+  name: string;
+  phone: string;
+  email?: string;
+  role: Role;
+  lastAddress: Address | null;
+};
+
+export type OrderStatus =
+  | 'pending'
+  | 'confirmed'
+  | 'preparing'
+  | 'out_for_delivery'
+  | 'delivered'
+  | 'cancelled'
+  | 'payment_failed';
+
+export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded';
+export type PaymentMethod = 'cod' | 'esewa';
+
+export type OrderLine = {
+  product: string;
+  sku: string;
+  name: string;
+  label: string;
+  image: string;
+  price: number;
+  quantity: number;
+  lineTotal: number;
+};
+
+export type QuoteProblem = { sku: string; code: 'NOT_AVAILABLE' | 'OUT_OF_STOCK'; available?: number; message: string };
+
+export type Quote = {
+  items: OrderLine[];
+  subtotal: number;
+  deliveryFee: number;
+  total: number;
+  problems: QuoteProblem[];
+};
+
+export type Order = {
+  id: string;
+  orderNumber: string;
+  user: string;
+  items: OrderLine[];
+  subtotal: number;
+  deliveryFee: number;
+  total: number;
+  address: Address;
+  status: OrderStatus;
+  statusHistory: { status: OrderStatus; at: string; note?: string }[];
+  payment: { method: PaymentMethod; status: PaymentStatus; reference?: string | null; paidAt?: string | null };
+  rider: { id: string; name: string; phone: string } | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type CartItem = {
   productId: string;
   sku: string;

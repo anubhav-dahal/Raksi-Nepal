@@ -12,6 +12,10 @@ const schema = z.object({
         .enum(['true', 'false'])
         .default('true')
         .transform((v) => v === 'true'),
+    JWT_SECRET: z.string().min(16, 'JWT_SECRET must be at least 16 characters'),
+    JWT_EXPIRES_IN: z.string().default('7d'),
+    // Flat delivery fee in whole NPR (area-based fees are Phase 7).
+    DELIVERY_FEE: z.coerce.number().int().min(0).default(100),
 });
 
 const parsed = schema.safeParse(process.env);
@@ -21,6 +25,11 @@ if (!parsed.success) {
     for (const issue of parsed.error.issues) {
         console.error(`  ${issue.path.join('.')}: ${issue.message}`);
     }
+    process.exit(1);
+}
+
+if (parsed.data.NODE_ENV === 'production' && parsed.data.JWT_SECRET.startsWith('change-me')) {
+    console.error('JWT_SECRET is still the example value. Set a long random secret.');
     process.exit(1);
 }
 
