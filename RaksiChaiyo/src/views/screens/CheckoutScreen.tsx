@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCheckoutController } from '../../controllers/checkoutController';
+import { payWithEsewa } from '../../controllers/paymentController';
 import { useT } from '../../i18n';
 import { formatNpr } from '../../utils/format';
 import { AppHeader } from '../components/AppHeader';
@@ -12,9 +13,17 @@ import { Eyebrow, Screen } from '../components/Layout';
 import { PaymentOption } from '../components/PaymentOption';
 import { EmptyState, ErrorState, Skeleton } from '../components/StateView';
 
+const ESEWA_GREEN = '#60bb46';
+
 export function CheckoutScreen() {
   const t = useT();
-  const c = useCheckoutController();
+  const c = useCheckoutController({
+    // eSewa: open the payment right after the order is created, then show the order.
+    onPlaced: async (order) => {
+      const outcome = order.payment.method === 'esewa' ? await payWithEsewa(order.id).catch(() => 'failed' as const) : undefined;
+      router.replace({ pathname: '/order/[id]', params: { id: order.id, placed: '1', ...(outcome ? { payment: outcome } : {}) } });
+    },
+  });
   const q = c.quote.data;
 
   if (c.items.length === 0) {
@@ -103,6 +112,14 @@ export function CheckoutScreen() {
             selected={c.paymentMethod === 'cod'}
             onPress={() => c.setPaymentMethod('cod')}
           />
+          <PaymentOption
+            mark="e"
+            markColor={ESEWA_GREEN}
+            title={t('checkout.esewa')}
+            note={t('checkout.esewaNote')}
+            selected={c.paymentMethod === 'esewa'}
+            onPress={() => c.setPaymentMethod('esewa')}
+          />
         </ScrollView>
       </KeyboardAvoidingView>
 
@@ -110,7 +127,9 @@ export function CheckoutScreen() {
         <SafeAreaView edges={['bottom']} className="border-t border-border bg-bg px-gutter pt-3">
           <Button
             className="mb-2"
-            label={t('checkout.placeOrder', { total: q ? formatNpr(q.total) : '…' })}
+            label={t(c.paymentMethod === 'esewa' ? 'checkout.payEsewa' : 'checkout.placeOrder', {
+              total: q ? formatNpr(q.total) : '…',
+            })}
             loading={c.placing}
             disabled={!c.canPlace}
             onPress={c.placeOrder}

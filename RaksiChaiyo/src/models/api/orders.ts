@@ -24,3 +24,10 @@ export const fetchMyOrders = async (token: string) => (await request<{ data: Ord
 
 export const fetchOrder = async (token: string, id: string) =>
   (await request<{ data: Order }>(`/orders/${encodeURIComponent(id)}`, { token })).data;
+
+export const cancelOrder = async (token: string, id: string) =>
+  (await request<{ data: Order }>(`/orders/${encodeURIComponent(id)}/cancel`, { method: 'POST', token })).data;
+
+/** eSewa didn't work out: pay cash on delivery instead. */
+export const payOnDelivery = async (token: string, id: string) =>
+  (await request<{ data: Order }>(`/orders/${encodeURIComponent(id)}/pay-on-delivery`, { method: 'POST', token })).data;

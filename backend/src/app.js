@@ -7,6 +7,7 @@ import { env } from './config/env.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import CategoryRouter from './routes/CategoryRouter.js';
 import OrderRouter from './routes/OrderRouter.js';
+import PaymentRouter from './routes/PaymentRouter.js';
 import ProductRouter from './routes/ProductRouter.js';
 import UserRouter from './routes/UserRouter.js';
 
@@ -31,6 +32,7 @@ app.use('/api/categories', CategoryRouter);
 app.use('/api/products', ProductRouter);
 app.use('/api/users', UserRouter);
 app.use('/api/orders', OrderRouter);
+app.use('/api/payments', PaymentRouter);
 
 app.use(notFound);
 app.use(errorHandler);

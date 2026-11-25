@@ -16,6 +16,14 @@ const schema = z.object({
     JWT_EXPIRES_IN: z.string().default('7d'),
     // Flat delivery fee in whole NPR (area-based fees are Phase 7).
     DELIVERY_FEE: z.coerce.number().int().min(0).default(100),
+    // Address the phone uses to reach this API (for eSewa redirects).
+    // Leave empty to use the address the app called (works on the same Wi-Fi).
+    PUBLIC_URL: z.string().url().optional().or(z.literal('').transform(() => undefined)),
+    // eSewa ePay v2. Defaults are eSewa's public sandbox (test money only).
+    ESEWA_PRODUCT_CODE: z.string().default('EPAYTEST'),
+    ESEWA_SECRET_KEY: z.string().default('8gBm/:&EnhH.1/q'),
+    ESEWA_FORM_URL: z.string().url().default('https://rc-epay.esewa.com.np/api/epay/main/v2/form'),
+    ESEWA_STATUS_URL: z.string().url().default('https://rc.esewa.com.np/api/epay/transaction/status/'),
 });
 
 const parsed = schema.safeParse(process.env);

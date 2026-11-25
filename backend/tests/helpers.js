@@ -30,3 +30,23 @@ export const variantOf = async (slug) => {
 };
 
 export const newKey = () => `test-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+/** Logs in a demo staff account ('admin' or 'rider'). */
+export const loginStaff = async (role) => {
+    const { DEMO_STAFF } = await import('../src/seed/staff.js');
+    const { phone, password } = DEMO_STAFF.find((s) => s.role === role);
+    const res = await request(app).post('/api/users/login').send({ phone, password }).expect(200);
+    return { token: res.body.data.token, user: res.body.data.user, auth: { Authorization: `Bearer ${res.body.data.token}` } };
+};
+
+/** Places an order for `customer` and returns it. */
+export const placeOrder = async (customer, { slug = 'fanta', quantity = 1, paymentMethod = 'cod' } = {}) => {
+    const { variant } = await variantOf(slug);
+    const res = await request(app)
+        .post('/api/orders')
+        .set(customer.auth)
+        .set('Idempotency-Key', newKey())
+        .send({ items: [{ sku: variant.sku, quantity }], address, paymentMethod })
+        .expect(201);
+    return res.body.data;
+};

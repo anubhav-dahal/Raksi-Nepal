@@ -5,6 +5,7 @@ process.env.JWT_SECRET = 'test-secret-at-least-16-chars';
 
 const { connectDB, disconnectDB } = await import('../src/config/db.js');
 const { seedDatabase } = await import('../src/seed/seedDatabase.js');
+const { seedDemoStaff } = await import('../src/seed/staff.js');
 const { default: app } = await import('../src/app.js');
 
 export { app };
@@ -12,6 +13,7 @@ export { app };
 export const startDB = async () => {
     await connectDB();
     await seedDatabase();
+    await seedDemoStaff();
 };
 
 export const stopDB = disconnectDB;
