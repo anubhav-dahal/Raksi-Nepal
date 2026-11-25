@@ -19,6 +19,9 @@ const schema = z.object({
     // Address the phone uses to reach this API (for eSewa redirects).
     // Leave empty to use the address the app called (works on the same Wi-Fi).
     PUBLIC_URL: z.string().url().optional().or(z.literal('').transform(() => undefined)),
+    // Where admin-uploaded images are saved. Served at /static/uploads.
+    // In production, point this at a persistent disk/volume.
+    UPLOAD_DIR: z.string().optional(),
     // eSewa ePay v2. Defaults are eSewa's public sandbox (test money only).
     ESEWA_PRODUCT_CODE: z.string().default('EPAYTEST'),
     ESEWA_SECRET_KEY: z.string().default('8gBm/:&EnhH.1/q'),

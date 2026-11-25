@@ -1,2 +1,4 @@
 node_modules/
 .env
+# Images uploaded by the admin (keep these on a persistent disk in production)
+public/uploads/

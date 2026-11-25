@@ -1,13 +1,15 @@
 {
   "expo": {
     "name": "Nepalgunj Sips",
-    "slug": "RaksiChaiyo",
+    "slug": "nepalgunj-sips",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.nepalgunjsips.app",
+      "buildNumber": "1"
     },
     "android": {
       "adaptiveIcon": {
@@ -15,7 +17,9 @@
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.nepalgunjsips.app",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -30,14 +34,22 @@
         {
           "backgroundColor": "#0b132b",
           "image": "./assets/splash-icon.png",
-          "imageWidth": 120
+          "imageWidth": 160
         }
       ],
       "expo-image",
       "expo-secure-store",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Nepalgunj Sips uses your photos so the shop admin can add product and category pictures.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ]
     ],
-    "scheme": "raksichaiyo",
+    "scheme": "nepalgunjsips",
     "backgroundColor": "#0b132b",
     "experiments": {
       "typedRoutes": false

@@ -35,7 +35,6 @@ export function CartScreen() {
               <Text className="font-body text-label text-muted">{t('cart.subtotal')}</Text>
               <Text className="font-display text-heading text-text">{formatNpr(cart.subtotal)}</Text>
             </View>
-            <Text className="max-w-[55%] text-right font-body text-caption text-muted">{t('cart.feeNote')}</Text>
           </View>
           <Button label={t('cart.checkout')} onPress={cart.checkout} />
         </BottomBar>

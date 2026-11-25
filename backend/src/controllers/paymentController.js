@@ -10,7 +10,7 @@ import { findVisibleOrder } from './orderController.js';
 const SESSION_AUDIENCE = 'esewa-session';
 
 // Only send the browser back into our app (no open redirects).
-const ALLOWED_RETURN = /^(raksichaiyo|exp|exps):\/\//;
+const ALLOWED_RETURN = /^(nepalgunjsips|exp|exps):\/\//;
 
 export const sessionSchema = {
     body: z.object({

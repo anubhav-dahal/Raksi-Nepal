@@ -48,7 +48,6 @@ export function OrderScreen({ id, placed, payment }: Props) {
                 </View>
               </Animated.View>
               <Text className="font-display text-heading text-text">{t('order.confirmedTitle')}</Text>
-              <Text className="text-center font-body text-body text-muted">{t('order.confirmedBody')}</Text>
             </View>
           )}
 

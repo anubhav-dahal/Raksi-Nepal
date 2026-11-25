@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { env } from './config/env.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
+import { UPLOAD_DIR } from './middleware/upload.js';
 import AdminRouter from './routes/AdminRouter.js';
 import CategoryRouter from './routes/CategoryRouter.js';
 import OrderRouter from './routes/OrderRouter.js';
@@ -22,7 +23,8 @@ app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(cors({ origin: env.CORS_ORIGIN === '*' ? true : env.CORS_ORIGIN.split(',') }));
 app.use(express.json({ limit: '100kb' }));
 
-// Product images and other files the app loads: /static/images/<file>
+// Admin uploads (may live outside the repo, see UPLOAD_DIR), then bundled images: /static/images/<file>
+app.use('/static/uploads', express.static(UPLOAD_DIR, { maxAge: '30d', immutable: true }));
 app.use('/static', express.static(publicDir, { maxAge: '7d' }));
 
 // Health Check Route

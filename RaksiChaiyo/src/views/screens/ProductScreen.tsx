@@ -100,8 +100,7 @@ export function ProductScreen({ id }: { id: string }) {
             </View>
           )}
 
-          <Divider className="my-4" />
-          <Text className="font-heading text-[14px] text-text">{t('product.about')}</Text>
+          <Divider className="my-3" />
           <Text className="font-body text-body leading-[21px] text-muted">{localize(product.description)}</Text>
           {product.alcoholic && (
             <View className="mt-1 self-start rounded-sm bg-accent/10 px-2.5 py-2">

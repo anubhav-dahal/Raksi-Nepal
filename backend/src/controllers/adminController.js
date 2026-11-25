@@ -3,7 +3,9 @@ import { z } from 'zod';
 import { ORDER_STATUSES, Order } from '../models/OrderModel.js';
 import { Product } from '../models/ProductModel.js';
 import { StockMovement } from '../models/StockMovementModel.js';
-import { ROLES, User } from '../models/UserModel.js';
+import { User } from '../models/UserModel.js';
+import { Category } from '../models/CategoryModel.js';
+import { imageField } from './catalogueAdminController.js';
 import { phoneField } from '../utils/phone.js';
 import { ACTIVE_STATUSES } from '../services/orderStatusService.js';
 import { changeStock } from '../services/stockService.js';
@@ -113,18 +115,25 @@ export const updateProductSchema = {
         .object({
             name: z.string().trim().min(2).max(80).optional(),
             description: z.string().trim().max(500).optional(),
-            image: z.string().url().optional(),
+            image: imageField.optional(),
+            categoryId: objectId.optional(),
             isActive: z.boolean().optional(),
         })
         .refine((b) => Object.keys(b).length > 0, 'nothing to update'),
 };
 
-// PATCH /api/admin/products/:id
+// PATCH /api/admin/products/:id   (name, description, photo, category, shown/hidden)
 export const updateProduct = async (req, res) => {
-    const { name, description, ...rest } = req.valid.body;
+    const { name, description, categoryId, ...rest } = req.valid.body;
     const set = { ...rest };
     if (name) set['name.en'] = name;
     if (description !== undefined) set['description.en'] = description;
+    if (categoryId) {
+        const category = await Category.findById(categoryId);
+        if (!category) throw ApiError.badRequest('Choose an existing category');
+        set.category = category._id;
+        set.alcoholic = category.alcoholic;
+    }
 
     const product = await Product.findByIdAndUpdate(req.valid.params.id, { $set: set }, { returnDocument: 'after', runValidators: true });
     if (!product) throw ApiError.notFound('Product not found');
@@ -188,19 +197,29 @@ export const listStockMovements = async (req, res) => {
 
 // ---- Staff -------------------------------------------------------------------
 
+// There is exactly one admin (created from ADMIN_PHONE / ADMIN_PASSWORD), so roles
+// given here are rider or customer only, and the admin's own role can't change.
 export const setRoleSchema = {
     body: z.object({
         phone: phoneField(),
-        role: z.enum(ROLES),
+        role: z.enum(['rider', 'customer']),
     }),
 };
 
 // POST /api/admin/staff   { phone, role }   (the person registers in the app first)
 export const setRole = async (req, res) => {
     const { phone, role } = req.valid.body;
-    if (phone === req.user.phone && role !== 'admin') throw ApiError.badRequest('You cannot remove your own admin role');
 
-    const user = await User.findOneAndUpdate({ phone }, { $set: { role } }, { returnDocument: 'after' });
-    if (!user) throw ApiError.notFound('No account with this phone number. Ask them to register in the app first.');
+    const user = await User.findOneAndUpdate(
+        { phone, role: { $ne: 'admin' } },
+        { $set: { role } },
+        { returnDocument: 'after' }
+    );
+    if (!user) {
+        const exists = await User.exists({ phone });
+        throw exists
+            ? ApiError.badRequest('The admin account cannot be changed here')
+            : ApiError.notFound('No account with this phone number. Ask them to register in the app first.');
+    }
     res.json({ data: user });
 };

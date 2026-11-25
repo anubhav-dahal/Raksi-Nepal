@@ -18,7 +18,6 @@ function AuthLayout({ eyebrow, title, body, children }: { eyebrow: string; title
             <Logo size={64} />
             <Eyebrow>{eyebrow}</Eyebrow>
             <Text className="text-center font-display text-heading text-text">{title}</Text>
-            <Text className="text-center font-body text-body text-muted">{body}</Text>
           </View>
           {children}
         </ScrollView>

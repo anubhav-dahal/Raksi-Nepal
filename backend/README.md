@@ -150,7 +150,7 @@ pending -> payment_failed
 
 Defaults use eSewa's **sandbox** (`EPAYTEST`, test money only). For live payments, set `ESEWA_PRODUCT_CODE`, `ESEWA_SECRET_KEY`, `ESEWA_FORM_URL` (`https://epay.esewa.com.np/api/epay/main/v2/form`) and `ESEWA_STATUS_URL` (`https://epay.esewa.com.np/api/epay/transaction/status/`).
 
-1. The app calls `POST /api/payments/esewa/:orderId/session` with `{ returnUrl }` (an app link: `raksichaiyo://`, `exp://`). It gets a 15-minute link back.
+1. The app calls `POST /api/payments/esewa/:orderId/session` with `{ returnUrl }` (an app link: `nepalgunjsips://`, `exp://`). It gets a 15-minute link back.
 2. The app opens the link in an in-app browser. `GET /api/payments/esewa/pay/:token` posts the signed form to eSewa.
 3. eSewa sends the browser to `/success/:token?data=...` or `/failure/:token`. On success the server checks the signature **and** asks eSewa's status API before marking the order paid. Then it redirects to `returnUrl?orderId=...&result=success|failed|cancelled|pending`.
 4. The app reloads the order from the server. The redirect itself is never trusted.

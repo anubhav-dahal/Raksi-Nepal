@@ -66,9 +66,7 @@ export function CheckoutScreen() {
                 [t('checkout.deliveryFee'), formatNpr(q.deliveryFee)],
               ]}
               total={[t('checkout.total'), formatNpr(q.total)]}
-            >
-              <Text className="font-body text-micro text-muted">{t('checkout.serverTotal')}</Text>
-            </SummaryCard>
+            />
           )}
 
           <View className="mt-3">

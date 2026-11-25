@@ -4,7 +4,7 @@ import { useT } from '../../i18n';
 import { localize } from '../../utils/format';
 import { AppHeader } from '../components/AppHeader';
 import { CategoryBanner, ProductCard } from '../components/Cards';
-import { Eyebrow, GridFiller, padToEven, Screen } from '../components/Layout';
+import { GridFiller, padToEven, Screen } from '../components/Layout';
 import { EmptyState, ErrorState, Skeleton } from '../components/StateView';
 import { useColors } from '../theme';
 
@@ -16,17 +16,11 @@ export function CategoryScreen({ slug }: { slug: string }) {
 
   // Prototype: photo banner, then "OUR PICKS / Choose your favourite" with the count.
   const header = (
-    <View className="mb-2 mt-1 gap-6">
+    <View className="mb-1 mt-1 gap-4">
       {category ? <CategoryBanner category={category} /> : <Skeleton className="h-[154px]" />}
-      <View className="flex-row items-end justify-between px-0.5">
-        <View className="gap-1">
-          <Eyebrow>{t('category.eyebrow')}</Eyebrow>
-          <Text className="font-heading text-title text-text">{t('category.heading')}</Text>
-        </View>
-        {products.data && (
-          <Text className="font-body text-label text-muted">{t('category.items', { count: products.data.length })}</Text>
-        )}
-      </View>
+      {products.data && (
+        <Text className="px-0.5 font-body-semibold text-label text-muted">{t('category.items', { count: products.data.length })}</Text>
+      )}
     </View>
   );
 

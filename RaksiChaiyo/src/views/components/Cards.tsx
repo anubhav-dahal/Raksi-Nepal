@@ -18,7 +18,6 @@ const SHADE = ['rgba(5,10,14,0.92)', 'rgba(5,10,14,0.45)', 'rgba(5,10,14,0.12)']
 
 /** Big photo tile on Home (component inventory #6). */
 export function CategoryCard({ category, onPress, index = 0 }: { category: Category; onPress: () => void; index?: number }) {
-  const t = useT();
   const name = localize(category.name);
   return (
     <Animated.View entering={FadeInDown.delay(index * 70).duration(450)} style={{ flex: 1 }}>
@@ -31,13 +30,8 @@ export function CategoryCard({ category, onPress, index = 0 }: { category: Categ
       >
         <ProductImage src={category.image} name={name} fit="cover" />
         <LinearGradient colors={SHADE} locations={[0, 0.45, 1]} start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} style={FILL} />
-        <View className="absolute right-3 top-3 h-8 w-8 items-center justify-center rounded-pill border border-white/25 bg-white/15">
-          <Icon name="arrow" size={16} color="#ffffff" />
-        </View>
-        <View className="absolute inset-x-4 bottom-4 gap-0.5">
-          <Text className="font-body text-micro text-white/70">{localize(category.subtitle)}</Text>
+        <View className="absolute inset-x-4 bottom-4">
           <Text className="font-display text-title text-white">{name}</Text>
-          {category.alcoholic && <Text className="mt-1 font-body text-[8px] text-white/70">{t('category.ageTag')}</Text>}
         </View>
       </Pressable>
     </Animated.View>
@@ -52,7 +46,6 @@ export function CategoryBanner({ category }: { category: Category }) {
       <ProductImage src={category.image} name={name} fit="cover" />
       <LinearGradient colors={SHADE} locations={[0, 0.5, 1]} start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} style={FILL} />
       <View className="absolute bottom-[18px] left-5">
-        <Text className="font-body text-label text-white/70">{localize(category.subtitle)}</Text>
         <Text className="font-display text-[27px] text-white">{name}</Text>
       </View>
     </View>
@@ -128,7 +121,7 @@ export function CartItemRow({ item, onQuantity, onRemove }: CartItemProps) {
       <View className="h-[68px] w-[65px] overflow-hidden rounded-[12px] bg-card-2">
         <Glow color={colors.accent} opacity={0.2} spread={0.7} />
         <View className="absolute inset-1.5">
-          <ProductImage src={item.image} name={item.name} />
+          <ProductImage src={item.image} name={item.name} size="tiny" />
         </View>
       </View>
       <View className="flex-1 gap-1">

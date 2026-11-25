@@ -1,5 +1,5 @@
-import { request } from './client';
-import type { AdminProduct, AdminSummary, OrderStatus, Rider, Role, StaffOrder, StockMovement, User } from '../types';
+import { request, upload, type UploadFile } from './client';
+import type { AdminCategory, AdminProduct, AdminSummary, OrderStatus, Rider, Role, StaffOrder, StockMovement, User } from '../types';
 
 // ---- Admin -------------------------------------------------------------------
 
@@ -21,8 +21,37 @@ export const setOrderStatus = async (token: string, orderId: string, status: Ord
 export const fetchAdminProducts = async (token: string) =>
   (await request<{ data: AdminProduct[] }>('/admin/products', { token })).data;
 
-export const updateProduct = async (token: string, id: string, body: { isActive?: boolean; name?: string; description?: string }) =>
+export type ProductUpdate = { isActive?: boolean; name?: string; description?: string; image?: string; categoryId?: string };
+
+export const updateProduct = async (token: string, id: string, body: ProductUpdate) =>
   (await request<{ data: AdminProduct }>(`/admin/products/${id}`, { method: 'PATCH', token, body })).data;
+
+export type VariantInput = { label: string; price: number; stock: number };
+
+export const createProduct = async (
+  token: string,
+  body: { categoryId: string; name: string; description: string; image: string; variants: VariantInput[] }
+) => (await request<{ data: AdminProduct }>('/admin/products', { method: 'POST', token, body })).data;
+
+export const addVariant = async (token: string, id: string, body: VariantInput) =>
+  (await request<{ data: AdminProduct }>(`/admin/products/${id}/variants`, { method: 'POST', token, body })).data;
+
+/** Uploads a photo; returns its URL path (/static/uploads/...) to save on a category or product. */
+export const uploadImage = async (token: string, file: UploadFile) =>
+  (await upload<{ data: { url: string } }>('/admin/uploads', 'image', file, token)).data.url;
+
+// ---- Admin: categories ----------------------------------------------------------
+
+export type CategoryInput = { name: string; image: string; alcoholic: boolean; isActive: boolean };
+
+export const fetchAdminCategories = async (token: string) =>
+  (await request<{ data: AdminCategory[] }>('/admin/categories', { token })).data;
+
+export const createCategory = async (token: string, body: CategoryInput) =>
+  (await request<{ data: AdminCategory }>('/admin/categories', { method: 'POST', token, body })).data;
+
+export const updateCategory = async (token: string, id: string, body: Partial<CategoryInput>) =>
+  (await request<{ data: AdminCategory }>(`/admin/categories/${id}`, { method: 'PATCH', token, body })).data;
 
 export const updatePrice = async (token: string, id: string, sku: string, price: number) =>
   (await request<{ data: AdminProduct }>(`/admin/products/${id}/variants/${encodeURIComponent(sku)}`, { method: 'PATCH', token, body: { price } })).data;

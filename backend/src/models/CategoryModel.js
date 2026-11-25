@@ -17,7 +17,11 @@ const categorySchema = new mongoose.Schema(
             trim: true,
             match: /^[a-z0-9-]+$/,
         },
-        subtitle: localizedText,
+        // Optional one-liner under the name (not shown in the app any more).
+        subtitle: {
+            en: { type: String, trim: true, default: '' },
+            ne: { type: String, trim: true, default: '' },
+        },
         image: { type: String, required: true },
         // Alcoholic categories need the 18+ confirmation in the app.
         alcoholic: { type: Boolean, default: false },

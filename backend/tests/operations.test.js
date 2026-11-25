@@ -143,7 +143,7 @@ describe('products, prices and stock audit', () => {
         const restock = moves.body.data.find((m) => m.reason === 'restock');
         assert.equal(restock.delta, 24);
         assert.equal(restock.note, 'Weekly delivery');
-        assert.equal(restock.by.name, 'Demo Admin');
+        assert.equal(restock.by.name, 'Admin');
     });
 
     test('orders and cancellations appear in the stock audit', async () => {

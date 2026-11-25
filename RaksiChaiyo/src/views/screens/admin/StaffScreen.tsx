@@ -1,14 +1,13 @@
 import { ScrollView, Text, View } from 'react-native';
 import { useStaffRoles } from '../../../controllers/staffControllers';
 import { useT, type StringKey } from '../../../i18n';
-import type { Role } from '../../../models/types';
 import { AppHeader } from '../../components/AppHeader';
 import { Button } from '../../components/Button';
 import { Chip } from '../../components/Chip';
 import { Input } from '../../components/Input';
 import { Eyebrow, Screen } from '../../components/Layout';
 
-const ROLES: Role[] = ['rider', 'admin', 'customer'];
+const ROLES = ['rider', 'customer'] as const;
 
 export function StaffScreen() {
   const t = useT();
@@ -18,7 +17,7 @@ export function StaffScreen() {
     <Screen>
       <AppHeader title={t('admin.staffTitle')} showCart={false} />
       <ScrollView contentContainerClassName="gap-4 px-gutter pb-10 pt-2" keyboardShouldPersistTaps="handled">
-        <Text className="font-body text-body text-muted">{t('admin.staffHint')}</Text>
+        <Text className="font-body text-body text-muted">{t('admin.riderRoleHint')}</Text>
         <Input label={t('auth.phone')} type="phone" placeholder="98XXXXXXXX" value={c.phone} onChangeText={c.setPhone} />
         <Text className="font-body-bold text-caption text-muted">{t('admin.role')}</Text>
         <View className="flex-row gap-2">

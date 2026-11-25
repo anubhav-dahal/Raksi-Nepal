@@ -4,7 +4,9 @@ import { useT, type StringKey } from '../../../i18n';
 import type { OrderFilter } from '../../../models/api/staff';
 import type { StaffOrder } from '../../../models/types';
 import { formatNpr } from '../../../utils/format';
+import { router } from 'expo-router';
 import { AppHeader } from '../../components/AppHeader';
+import { IconButton } from '../../components/IconButton';
 import { Button } from '../../components/Button';
 import { Chip } from '../../components/Chip';
 import { Eyebrow, Screen } from '../../components/Layout';
@@ -67,8 +69,9 @@ export function AdminDashboardScreen() {
         <Skeleton className="h-36" />
       )}
       <View className="flex-row gap-2">
-        <Button variant="secondary" icon="box" label={t('admin.products')} onPress={c.openProducts} className="flex-1" />
-        <Button variant="secondary" icon="user" label={t('admin.staff')} onPress={c.openStaff} className="flex-1" />
+        <Button variant="secondary" label={t('admin.categories')} onPress={c.openCategories} className="flex-1 px-2" />
+        <Button variant="secondary" label={t('admin.productsShort')} onPress={c.openProducts} className="flex-1 px-2" />
+        <Button variant="secondary" label={t('admin.staff')} onPress={c.openStaff} className="flex-1 px-2" />
       </View>
       <View className="mt-2 flex-row items-center justify-between">
         <Eyebrow>{`${t('admin.queue')} · ${activeCount}`}</Eyebrow>
@@ -83,7 +86,10 @@ export function AdminDashboardScreen() {
 
   return (
     <Screen>
-      <AppHeader title={t('admin.title')} showCart={false} />
+      <AppHeader
+        showCart={false}
+        right={<IconButton icon="user" accessibilityLabel={t('account.title')} onPress={() => router.push('/account')} />}
+      />
       {c.orders.error && !c.orders.data ? (
         <ErrorState error={c.orders.error} onRetry={c.reloadAll} />
       ) : (

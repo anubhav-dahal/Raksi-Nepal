@@ -14,7 +14,7 @@ export const payWithEsewa = async (orderId: string): Promise<PaymentOutcome> => 
   const token = useAuthStore.getState().token;
   if (!token) throw new Error('Not logged in');
 
-  // exp://... in Expo Go, raksichaiyo://... in a real build.
+  // exp://... in Expo Go, nepalgunjsips://... in a real build.
   const returnUrl = Linking.createURL('/payment-result');
   const { url } = await createEsewaSession(token, orderId, returnUrl);
 

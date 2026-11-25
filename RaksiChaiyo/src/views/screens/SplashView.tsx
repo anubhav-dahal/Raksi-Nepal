@@ -103,12 +103,10 @@ export function SplashView({ onDone, ready }: { onDone: () => void; ready: boole
       <Animated.View style={[styles.copy, textStyle]}>
         <Text style={styles.eyebrow}>{t('brand.top').toUpperCase()}</Text>
         <Text style={styles.wordmark}>{t('brand.bottom')}</Text>
-        <Text style={styles.tagline}>{t('tagline')}</Text>
       </Animated.View>
       <View style={styles.loaderTrack}>
         <Animated.View style={[styles.loaderFill, loaderStyle]} />
       </View>
-      <Text style={styles.footer}>{t('location')}</Text>
     </Animated.View>
   );
 }

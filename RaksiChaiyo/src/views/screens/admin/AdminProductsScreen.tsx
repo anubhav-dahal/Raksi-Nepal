@@ -1,10 +1,12 @@
+import { router } from 'expo-router';
 import { FlatList, Pressable, RefreshControl, Text, TextInput, View } from 'react-native';
 import { useAdminProducts } from '../../../controllers/staffControllers';
 import { useT } from '../../../i18n';
 import { formatNpr, localize } from '../../../utils/format';
 import { AppHeader } from '../../components/AppHeader';
 import { LOW_STOCK } from '../../components/Badge';
-import { Screen } from '../../components/Layout';
+import { BottomBar, Screen } from '../../components/Layout';
+import { Button } from '../../components/Button';
 import { ProductImage } from '../../components/ProductImage';
 import { ErrorState, Skeleton } from '../../components/StateView';
 import { useColors } from '../../theme';
@@ -15,7 +17,7 @@ export function AdminProductsScreen() {
   const c = useAdminProducts();
 
   return (
-    <Screen>
+    <Screen edges={['top']}>
       <AppHeader title={t('admin.products')} showCart={false} />
       <View className="px-gutter pb-2">
         <TextInput
@@ -43,7 +45,7 @@ export function AdminProductsScreen() {
               className={`flex-row items-center gap-3 rounded-lg border border-border bg-card p-2.5 active:opacity-80 ${p.isActive ? '' : 'opacity-60'}`}
             >
               <View className="h-12 w-12 rounded-sm bg-card-2 p-1">
-                <ProductImage src={p.image} name={localize(p.name)} />
+                <ProductImage src={p.image} name={localize(p.name)} size="tiny" />
               </View>
               <View className="flex-1 gap-0.5">
                 <Text numberOfLines={1} className="font-heading text-body text-text">
@@ -63,6 +65,9 @@ export function AdminProductsScreen() {
           )}
         />
       )}
+      <BottomBar>
+        <Button icon="plus" label={t('admin.newProduct')} onPress={() => router.push('/admin/product/new')} />
+      </BottomBar>
     </Screen>
   );
 }

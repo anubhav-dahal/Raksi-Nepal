@@ -115,6 +115,8 @@ export type AdminSummary = {
 
 export type Rider = User & { activeOrders: number };
 
+export type AdminCategory = Category & { isActive: boolean; productCount: number };
+
 export type AdminProduct = Omit<Product, 'category'> & {
   category: { id: string; name: Localized; slug: string };
   isActive: boolean;

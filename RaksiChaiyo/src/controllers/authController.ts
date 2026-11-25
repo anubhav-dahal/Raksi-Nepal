@@ -25,6 +25,13 @@ const fieldErrors = (e: unknown): Errors => {
 /** After login/register: go back to where the user came from (e.g. checkout). */
 const leave = () => (router.canGoBack() ? router.back() : router.replace('/'));
 
+/** After login: staff go to their own area, customers back to where they were (e.g. checkout). */
+const afterLogin = (role: string) => {
+  if (role === 'admin') router.replace('/admin');
+  else if (role === 'rider') router.replace('/rider');
+  else leave();
+};
+
 export const useLoginController = () => {
   const t = useT();
   const login = useAuthStore((s) => s.login);
@@ -44,7 +51,7 @@ export const useLoginController = () => {
     try {
       const user = await login(normalizePhone(phone), password);
       toast(t('auth.welcome', { name: user.name.split(' ')[0] }));
-      leave();
+      afterLogin(user.role);
     } catch (e) {
       setErrors({ ...fieldErrors(e), form: errorMessage(e, t) });
     } finally {

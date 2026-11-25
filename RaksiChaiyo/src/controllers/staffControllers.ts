@@ -66,6 +66,7 @@ export const useAdminDashboard = () => {
     reloadAll,
     openOrder: (id: string) => router.push({ pathname: '/admin/order/[id]', params: { id } }),
     openProducts: () => router.push('/admin/products'),
+    openCategories: () => router.push('/admin/categories'),
     openStaff: () => router.push('/admin/staff'),
   };
 };
@@ -171,6 +172,17 @@ export const useAdminProduct = (id: string) => {
       run('active', () => withAuth((token) => staff.updateProduct(token, id, { isActive: !product.isActive })), t('admin.updated')).then(
         refresh
       ),
+    /** Name, description, photo or category. */
+    saveDetails: (body: staff.ProductUpdate) =>
+      run('details', () => withAuth((token) => staff.updateProduct(token, id, body)), t('admin.saved')).then(async (ok) => {
+        await refresh();
+        return ok;
+      }),
+    addSize: (body: staff.VariantInput) =>
+      run('add-size', () => withAuth((token) => staff.addVariant(token, id, body)), t('admin.saved')).then(async (ok) => {
+        await refresh();
+        return ok;
+      }),
   };
 };
 
@@ -179,7 +191,7 @@ export const useAdminProduct = (id: string) => {
 export const useStaffRoles = () => {
   const t = useT();
   const [phone, setPhone] = useState('');
-  const [role, setRole] = useState<Role>('rider');
+  const [role, setRole] = useState<'rider' | 'customer'>('rider');
   const { busy, run } = useAction();
   const riders = useAsync(() => withAuth(staff.fetchRiders), []);
 

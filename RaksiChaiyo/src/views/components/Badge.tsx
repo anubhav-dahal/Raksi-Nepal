@@ -24,12 +24,12 @@ export function Badge({ label, tone = 'neutral' }: { label: string; tone?: Tone 
 
 export const LOW_STOCK = 5;
 
-/** In stock / Only N left / Out of stock. */
-export function StockBadge({ stock }: { stock: number }) {
+/** Only N left / Out of stock. Nothing when there's plenty (set showInStock to say so explicitly). */
+export function StockBadge({ stock, showInStock = false }: { stock: number; showInStock?: boolean }) {
   const t = useT();
   if (stock <= 0) return <Badge tone="error" label={t('product.outOfStock')} />;
   if (stock <= LOW_STOCK) return <Badge tone="warning" label={t('product.lowStock', { count: stock })} />;
-  return <Badge tone="success" label={t('product.inStock')} />;
+  return showInStock ? <Badge tone="success" label={t('product.inStock')} /> : null;
 }
 
 /** Rounded info pill with a dot, e.g. "Delivering now". */

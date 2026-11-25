@@ -1,4 +1,5 @@
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
 // Base URL of the backend.
 // 1. EXPO_PUBLIC_API_URL if set (see .env.example)
@@ -34,6 +35,39 @@ type RequestOptions = {
   token?: string | null;
   headers?: Record<string, string>;
 };
+
+/** A picked image to upload (from expo-image-picker). */
+export type UploadFile = { uri: string; name: string; type: string };
+
+/** POST multipart/form-data with one file in `field`. */
+export async function upload<T>(path: string, field: string, file: UploadFile, token: string): Promise<T> {
+  const form = new FormData();
+  if (Platform.OS === 'web') {
+    // Browsers give a blob: URL; send the actual bytes.
+    const blob = await (await fetch(file.uri)).blob();
+    form.append(field, blob, file.name);
+  } else {
+    // React Native reads the file from its URI.
+    form.append(field, file as unknown as Blob);
+  }
+
+  let res: Response;
+  try {
+    res = await fetch(`${API_URL}/api${path}`, {
+      method: 'POST',
+      headers: { Accept: 'application/json', Authorization: `Bearer ${token}` },
+      body: form,
+    });
+  } catch {
+    throw new ApiError(0, 'NETWORK', 'Cannot reach the server');
+  }
+  const json = await res.json().catch(() => null);
+  if (!res.ok) {
+    const err = json?.error;
+    throw new ApiError(res.status, err?.code ?? 'HTTP_ERROR', err?.message ?? `Upload failed (${res.status})`, err?.details);
+  }
+  return json as T;
+}
 
 export async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const controller = new AbortController();

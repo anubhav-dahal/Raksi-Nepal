@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, ScrollView, Text, View } from 'react-native';
+import { useCategoryOptions, usePhotoUpload } from '../../../controllers/catalogueAdminControllers';
 import { useAdminProduct } from '../../../controllers/staffControllers';
 import { useT, type StringKey } from '../../../i18n';
 import type { AdminProduct, Variant } from '../../../models/types';
@@ -8,9 +9,9 @@ import { AppHeader } from '../../components/AppHeader';
 import { StockBadge } from '../../components/Badge';
 import { Button } from '../../components/Button';
 import { Chip } from '../../components/Chip';
+import { PhotoField } from '../../components/FormBits';
 import { Input } from '../../components/Input';
 import { Eyebrow, Screen } from '../../components/Layout';
-import { ProductImage } from '../../components/ProductImage';
 import { ErrorState, Skeleton } from '../../components/StateView';
 
 type StockReason = 'restock' | 'adjustment' | 'damaged';
@@ -92,6 +93,93 @@ function VariantEditor({ variant, c }: { variant: Variant; c: ReturnType<typeof 
   );
 }
 
+/** Photo, name, description and category. */
+function DetailsEditor({ product, c }: { product: AdminProduct; c: ReturnType<typeof useAdminProduct> }) {
+  const t = useT();
+  const photo = usePhotoUpload();
+  const categories = useCategoryOptions();
+  const [name, setName] = useState(localize(product.name));
+  const [description, setDescription] = useState(localize(product.description));
+  const [categoryId, setCategoryId] = useState(product.category.id);
+
+  useEffect(() => {
+    setName(localize(product.name));
+    setDescription(localize(product.description));
+    setCategoryId(product.category.id);
+  }, [product]);
+
+  const changed =
+    name.trim() !== localize(product.name) || description.trim() !== localize(product.description) || categoryId !== product.category.id;
+
+  return (
+    <View className="gap-3">
+      <PhotoField
+        image={product.image}
+        name={name}
+        uploading={photo.uploading}
+        onPress={async () => {
+          const url = await photo.pick([1, 1]);
+          if (url) c.saveDetails({ image: url });
+        }}
+      />
+      <Input label={t('admin.name')} value={name} onChangeText={setName} />
+      <Input label={t('admin.description')} value={description} onChangeText={setDescription} multiline />
+      <Text className="font-body-bold text-caption text-muted">{t('admin.category')}</Text>
+      <View className="flex-row flex-wrap gap-2">
+        {(categories.data ?? []).map((cat) => (
+          <Chip key={cat.id} label={localize(cat.name)} selected={categoryId === cat.id} onPress={() => setCategoryId(cat.id)} />
+        ))}
+      </View>
+      {changed && (
+        <Button
+          label={t('admin.saveDetails')}
+          loading={c.busy === 'details'}
+          disabled={!!c.busy || name.trim().length < 2}
+          onPress={() => c.saveDetails({ name: name.trim(), description: description.trim(), categoryId })}
+        />
+      )}
+    </View>
+  );
+}
+
+/** A new size with its price and opening stock. */
+function AddSize({ c }: { c: ReturnType<typeof useAdminProduct> }) {
+  const t = useT();
+  const [label, setLabel] = useState('');
+  const [price, setPrice] = useState('');
+  const [stock, setStock] = useState('');
+  const valid = label.trim() && /^\d+$/.test(price.trim()) && /^\d+$/.test(stock.trim());
+
+  return (
+    <View className="gap-2 rounded-lg border border-dashed border-border p-3">
+      <Input label={t('admin.sizeLabel')} value={label} onChangeText={setLabel} placeholder="330 ml can" />
+      <View className="flex-row gap-2">
+        <View className="flex-1">
+          <Input label={t('admin.sizePrice')} value={price} onChangeText={setPrice} keyboardType="number-pad" />
+        </View>
+        <View className="flex-1">
+          <Input label={t('admin.sizeStock')} value={stock} onChangeText={setStock} keyboardType="number-pad" />
+        </View>
+      </View>
+      <Button
+        variant="secondary"
+        icon="plus"
+        label={t('admin.addSize')}
+        disabled={!valid || !!c.busy}
+        loading={c.busy === 'add-size'}
+        onPress={async () => {
+          const ok = await c.addSize({ label: label.trim(), price: Number(price), stock: Number(stock) });
+          if (ok) {
+            setLabel('');
+            setPrice('');
+            setStock('');
+          }
+        }}
+      />
+    </View>
+  );
+}
+
 export function AdminProductScreen({ id }: { id: string }) {
   const t = useT();
   const c = useAdminProduct(id);
@@ -107,27 +195,22 @@ export function AdminProductScreen({ id }: { id: string }) {
       ) : (
         <KeyboardAvoidingView behavior="padding" className="flex-1">
           <ScrollView contentContainerClassName="gap-4 px-gutter pb-10 pt-2" keyboardShouldPersistTaps="handled">
-            <View className="flex-row items-center gap-3">
-              <View className="h-20 w-20 rounded-md bg-card-2 p-2">
-                <ProductImage src={p.image} name={localize(p.name)} />
-              </View>
-              <View className="flex-1 gap-1">
-                <Text className="font-body text-caption text-muted">{localize(p.category.name)}</Text>
-                <Text className="font-heading text-title text-text">{localize(p.name)}</Text>
-                <Button
-                  variant={p.isActive ? 'secondary' : 'primary'}
-                  label={p.isActive ? t('admin.hide') : t('admin.show')}
-                  loading={c.busy === 'active'}
-                  disabled={!!c.busy}
-                  onPress={c.toggleActive}
-                  className="h-10 self-start"
-                />
-              </View>
-            </View>
+            <DetailsEditor product={p} c={c} />
+            <Button
+              variant={p.isActive ? 'secondary' : 'primary'}
+              label={p.isActive ? t('admin.hide') : t('admin.show')}
+              loading={c.busy === 'active'}
+              disabled={!!c.busy}
+              onPress={c.toggleActive}
+            />
 
+            <View className="mt-2">
+              <Eyebrow>{t('admin.sizes')}</Eyebrow>
+            </View>
             {p.variants.map((v) => (
               <VariantEditor key={v.sku} variant={v} c={c} />
             ))}
+            <AddSize c={c} />
 
             <View className="gap-2">
               <Eyebrow>{t('admin.movements')}</Eyebrow>

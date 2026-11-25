@@ -11,8 +11,8 @@ type Props = {
   name: string;
   /** cover for photos (categories), contain for product packshots. */
   fit?: 'cover' | 'contain';
-  /** Placeholder text size. */
-  size?: 'small' | 'large';
+  /** Placeholder size: tiny for list thumbnails (initials only). */
+  size?: 'tiny' | 'small' | 'large';
 };
 
 const initials = (name: string) =>
@@ -38,10 +38,14 @@ export function ProductImage({ src, name, fit = 'contain', size = 'small' }: Pro
     return (
       <View className="absolute inset-0 items-center justify-center bg-card-2">
         <Glow color={colors.accent} opacity={0.35} spread={0.75} />
-        <Text className={`font-display text-accent ${size === 'large' ? 'text-[64px]' : 'text-[30px]'}`}>{initials(name)}</Text>
-        <Text numberOfLines={1} className="mt-1 px-3 font-body-semibold text-micro uppercase tracking-[1px] text-muted">
-          {name}
+        <Text className={`font-display text-accent ${size === 'large' ? 'text-[64px]' : size === 'tiny' ? 'text-[15px]' : 'text-[30px]'}`}>
+          {initials(name)}
         </Text>
+        {size !== 'tiny' && (
+          <Text numberOfLines={1} className="mt-1 px-3 font-body-semibold text-micro uppercase tracking-[1px] text-muted">
+            {name}
+          </Text>
+        )}
       </View>
     );
   }
