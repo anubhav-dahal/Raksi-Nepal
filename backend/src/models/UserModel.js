@@ -27,6 +27,8 @@ const userSchema = new mongoose.Schema(
         role: { type: String, enum: ROLES, default: 'customer' },
         // Pre-fills the checkout form next time.
         lastAddress: { type: addressSchema, default: null },
+        // Expo push tokens of the user's devices (status-change notifications).
+        pushTokens: { type: [String], default: [], select: false },
         isActive: { type: Boolean, default: true },
     },
     { timestamps: true }

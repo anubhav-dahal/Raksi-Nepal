@@ -4,7 +4,7 @@ import { after, before, test } from 'node:test';
 import assert from 'node:assert/strict';
 import request from 'supertest';
 import { app, startDB, stopDB } from './setup.js';
-import { address, loginStaff, newKey } from './helpers.js';
+import { address, assignDemoRider, loginStaff, newKey } from './helpers.js';
 
 before(startDB);
 after(stopDB);
@@ -47,9 +47,16 @@ test('MVP journey: browse -> choose -> cart -> checkout -> login -> pay (COD) ->
 
     // 9. Shop moves it along; customer sees "on the way"
     const admin = await loginStaff('admin');
-    for (const status of ['confirmed', 'preparing', 'out_for_delivery']) {
+    for (const status of ['confirmed', 'preparing']) {
         await request(app).patch(`/api/orders/${order.id}/status`).set(admin.auth).send({ status }).expect(200);
     }
+    const rider = await assignDemoRider(admin, order.id);
+    await request(app)
+        .post(`/api/rider/orders/${order.id}/status`)
+        .set(rider.auth)
+        .send({ status: 'out_for_delivery' })
+        .expect(200);
     const onTheWay = (await request(app).get(`/api/orders/${order.id}`).set(auth).expect(200)).body.data;
     assert.equal(onTheWay.status, 'out_for_delivery');
+    assert.equal(onTheWay.rider.name, 'Demo Rider');
 });

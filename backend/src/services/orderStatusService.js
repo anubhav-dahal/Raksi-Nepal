@@ -1,5 +1,6 @@
 import { Order } from '../models/OrderModel.js';
 import { ApiError } from '../utils/ApiError.js';
+import { notifyStatusChange } from './notificationService.js';
 import { restoreStock } from './orderService.js';
 
 // Allowed moves. Anything else is rejected.
@@ -31,6 +32,9 @@ export const changeStatus = async (order, to, { by = null, note = '' } = {}) => 
     if (to === 'confirmed' && order.payment.method === 'esewa' && order.payment.status !== 'paid') {
         throw ApiError.conflict('This order is waiting for eSewa payment and cannot be confirmed yet');
     }
+    if (to === 'out_for_delivery' && !order.rider) {
+        throw ApiError.conflict('Assign a rider before sending the order out');
+    }
 
     // Conditional update: if someone else changed the status a moment ago, this fails.
     const update = {
@@ -50,5 +54,12 @@ export const changeStatus = async (order, to, { by = null, note = '' } = {}) => 
 
     if (to === 'cancelled' || to === 'payment_failed') await restoreStock(updated);
 
+    notifyStatusChange(updated);
     return updated;
 };
+
+// What a rider may do with an order assigned to them.
+export const RIDER_TRANSITIONS = { preparing: ['out_for_delivery'], out_for_delivery: ['delivered'] };
+
+export const riderCanMove = (order, riderId, to) =>
+    !!order.rider && order.rider._id.equals(riderId) && (RIDER_TRANSITIONS[order.status]?.includes(to) ?? false);

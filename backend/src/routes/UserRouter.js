@@ -1,7 +1,16 @@
 import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
 import { env } from '../config/env.js';
-import { login, loginSchema, me, register, registerSchema } from '../controllers/userController.js';
+import {
+    login,
+    loginSchema,
+    me,
+    pushTokenSchema,
+    register,
+    registerSchema,
+    removePushToken,
+    savePushToken,
+} from '../controllers/userController.js';
 import { requireAuth } from '../middleware/requireAuth.js';
 import { validate } from '../middleware/validate.js';
 import { ApiError } from '../utils/ApiError.js';
@@ -22,5 +31,7 @@ const authLimiter = rateLimit({
 router.post('/register', authLimiter, validate(registerSchema), register);
 router.post('/login', authLimiter, validate(loginSchema), login);
 router.get('/me', requireAuth, me);
+router.post('/me/push-token', requireAuth, validate(pushTokenSchema), savePushToken);
+router.delete('/me/push-token', requireAuth, validate(pushTokenSchema), removePushToken);
 
 export default router;

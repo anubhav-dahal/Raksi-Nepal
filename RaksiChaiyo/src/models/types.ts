@@ -102,6 +102,38 @@ export type Order = {
   updatedAt: string;
 };
 
+/** Orders as staff see them: the customer is populated. */
+export type StaffOrder = Omit<Order, 'user'> & { user: { id: string; name: string; phone: string } };
+
+export type AdminSummary = {
+  active: Partial<Record<OrderStatus, number>>;
+  todayOrders: number;
+  todayRevenue: number;
+  lowStockProducts: number;
+  awaitingPayment: number;
+};
+
+export type Rider = User & { activeOrders: number };
+
+export type AdminProduct = Omit<Product, 'category'> & {
+  category: { id: string; name: Localized; slug: string };
+  isActive: boolean;
+};
+
+export type StockReason = 'order' | 'order_cancelled' | 'restock' | 'adjustment' | 'damaged';
+
+export type StockMovement = {
+  id: string;
+  sku: string;
+  delta: number;
+  stockAfter: number;
+  reason: StockReason;
+  note: string;
+  by: { id: string; name: string; role: Role } | null;
+  order: { id: string; orderNumber: string } | null;
+  createdAt: string;
+};
+
 export type CartItem = {
   productId: string;
   sku: string;

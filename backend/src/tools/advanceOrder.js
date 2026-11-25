@@ -42,6 +42,18 @@ try {
         process.exit(0);
     }
 
+    // An order needs a rider before it goes out: use the first rider.
+    if (to === 'out_for_delivery' && !order.rider) {
+        const [rider] = await call('/admin/riders', { headers: auth });
+        if (!rider) throw new Error('No riders yet. Give someone the rider role first.');
+        await call(`/admin/orders/${order.id}/assign`, {
+            method: 'POST',
+            headers: auth,
+            body: JSON.stringify({ riderId: rider.id }),
+        });
+        console.log(`Assigned rider ${rider.name}`);
+    }
+
     const updated = await call(`/orders/${order.id}/status`, {
         method: 'PATCH',
         headers: auth,

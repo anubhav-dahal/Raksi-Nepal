@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useAccountController } from '../../controllers/orderControllers';
 import { useT } from '../../i18n';
@@ -56,6 +57,13 @@ export function AccountScreen() {
             </View>
           </View>
         </View>
+
+        {c.user?.role === 'admin' && (
+          <Button icon="box" label={t('staff.adminDashboard')} onPress={() => router.push('/admin')} />
+        )}
+        {c.user?.role === 'rider' && (
+          <Button icon="truck" label={t('staff.riderDeliveries')} onPress={() => router.push('/rider')} />
+        )}
 
         <View className="mt-2">
           <Eyebrow>{t('account.orders')}</Eyebrow>

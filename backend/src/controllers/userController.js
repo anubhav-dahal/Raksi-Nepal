@@ -50,3 +50,23 @@ export const login = async (req, res) => {
 export const me = (req, res) => {
     res.json({ data: req.user });
 };
+
+export const pushTokenSchema = {
+    body: z.object({ token: z.string().regex(/^Expo(nent)?PushToken\[[^\]]+\]$/, 'not an Expo push token') }),
+};
+
+// POST /api/users/me/push-token   (keeps the last 5 devices)
+export const savePushToken = async (req, res) => {
+    await User.updateOne({ _id: req.user._id }, { $pull: { pushTokens: req.valid.body.token } });
+    await User.updateOne(
+        { _id: req.user._id },
+        { $push: { pushTokens: { $each: [req.valid.body.token], $slice: -5 } } }
+    );
+    res.status(204).end();
+};
+
+// DELETE /api/users/me/push-token   (on logout)
+export const removePushToken = async (req, res) => {
+    await User.updateOne({ _id: req.user._id }, { $pull: { pushTokens: req.valid.body.token } });
+    res.status(204).end();
+};

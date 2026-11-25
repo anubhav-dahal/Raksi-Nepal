@@ -50,3 +50,10 @@ export const placeOrder = async (customer, { slug = 'fanta', quantity = 1, payme
         .expect(201);
     return res.body.data;
 };
+
+/** Admin assigns the demo rider to an order. */
+export const assignDemoRider = async (admin, orderId) => {
+    const rider = await loginStaff('rider');
+    await request(app).post(`/api/admin/orders/${orderId}/assign`).set(admin.auth).send({ riderId: rider.user.id }).expect(200);
+    return rider;
+};

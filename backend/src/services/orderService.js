@@ -1,7 +1,9 @@
+import mongoose from 'mongoose';
 import { env } from '../config/env.js';
 import { Order } from '../models/OrderModel.js';
 import { Product } from '../models/ProductModel.js';
 import { ApiError } from '../utils/ApiError.js';
+import { changeStock } from './stockService.js';
 
 // Same SKU twice in a request counts as one line.
 const mergeItems = (items) => {
@@ -58,14 +60,12 @@ export const quote = async (items) => {
     return { items: lines, subtotal, deliveryFee, total: subtotal + deliveryFee, problems };
 };
 
-const takeStock = (line) =>
-    Product.updateOne(
-        { _id: line.product, variants: { $elemMatch: { sku: line.sku, stock: { $gte: line.quantity } } } },
-        { $inc: { 'variants.$.stock': -line.quantity } }
-    );
+// Every stock change goes through changeStock, which also writes the audit trail.
+const takeStock = (line, orderId) =>
+    changeStock({ product: line.product, sku: line.sku, delta: -line.quantity, reason: 'order', order: orderId });
 
-const returnStock = (line) =>
-    Product.updateOne({ _id: line.product, 'variants.sku': line.sku }, { $inc: { 'variants.$.stock': line.quantity } });
+const returnStock = (line, orderId, reason = 'order_cancelled') =>
+    changeStock({ product: line.product, sku: line.sku, delta: line.quantity, reason, order: orderId });
 
 /**
  * Places an order. Prices and stock are checked on the server; stock is taken
@@ -85,11 +85,14 @@ export const placeOrder = async ({ user, items, address, paymentMethod, expected
         });
     }
 
+    // Id chosen up front so the stock records can point at the order.
+    const orderId = new mongoose.Types.ObjectId();
+    const giveBack = (lines) => Promise.all(lines.map((l) => returnStock(l, orderId, 'adjustment')));
+
     const taken = [];
     for (const line of priced.items) {
-        const { modifiedCount } = await takeStock(line);
-        if (modifiedCount !== 1) {
-            await Promise.all(taken.map(returnStock));
+        if ((await takeStock(line, orderId)) === null) {
+            await giveBack(taken);
             throw ApiError.conflict('Some items are not available in the quantity you asked for', [
                 { sku: line.sku, code: 'OUT_OF_STOCK', message: 'Just sold out' },
             ]);
@@ -99,6 +102,7 @@ export const placeOrder = async ({ user, items, address, paymentMethod, expected
 
     try {
         const order = await Order.create({
+            _id: orderId,
             user: user._id,
             items: priced.items,
             subtotal: priced.subtotal,
@@ -110,7 +114,7 @@ export const placeOrder = async ({ user, items, address, paymentMethod, expected
         });
         return { order, created: true };
     } catch (error) {
-        await Promise.all(taken.map(returnStock));
+        await giveBack(taken);
         // Two identical requests at the same moment: the other one won.
         if (error?.code === 11000) {
             const winner = await Order.findOne({ user: user._id, idempotencyKey });
@@ -124,5 +128,5 @@ export const placeOrder = async ({ user, items, address, paymentMethod, expected
 export const restoreStock = async (order) => {
     const claimed = await Order.updateOne({ _id: order._id, stockRestored: false }, { $set: { stockRestored: true } });
     if (claimed.modifiedCount !== 1) return;
-    await Promise.all(order.items.map(returnStock));
+    await Promise.all(order.items.map((line) => returnStock(line, order._id)));
 };

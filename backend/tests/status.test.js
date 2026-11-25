@@ -2,7 +2,7 @@ import { after, before, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import request from 'supertest';
 import { app, startDB, stopDB } from './setup.js';
-import { loginStaff, placeOrder, registerCustomer, variantOf } from './helpers.js';
+import { assignDemoRider, loginStaff, placeOrder, registerCustomer, variantOf } from './helpers.js';
 
 before(startDB);
 after(stopDB);
@@ -17,6 +17,11 @@ describe('order status', () => {
         const order = await placeOrder(customer);
 
         for (const status of ['confirmed', 'preparing', 'out_for_delivery']) {
+            if (status === 'out_for_delivery') {
+                const blocked = await setStatus(admin, order.id, status).expect(409);
+                assert.match(blocked.body.error.message, /Assign a rider/);
+                await assignDemoRider(admin, order.id);
+            }
             const res = await setStatus(admin, order.id, status).expect(200);
             assert.equal(res.body.data.status, status);
             assert.equal(res.body.data.payment.status, 'pending');

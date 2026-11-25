@@ -12,6 +12,7 @@ import { Icon } from '../components/Icon';
 import { Eyebrow, Screen } from '../components/Layout';
 import { OrderStatusBadge } from '../components/OrderStatusBadge';
 import { ErrorState, Skeleton } from '../components/StateView';
+import { confirmDestructive } from '../confirm';
 import { status as statusColors, useColors } from '../theme';
 
 const STEPS: OrderStatus[] = ['pending', 'confirmed', 'preparing', 'out_for_delivery', 'delivered'];
@@ -107,7 +108,15 @@ export function OrderScreen({ id, placed, payment }: Props) {
 
           <View className="gap-2">
             {c.canCancel && (
-              <Button variant="secondary" label={t('order.cancel')} loading={c.busy === 'cancel'} disabled={!!c.busy} onPress={c.cancel} />
+              <Button
+                variant="secondary"
+                label={t('order.cancel')}
+                loading={c.busy === 'cancel'}
+                disabled={!!c.busy}
+                onPress={() =>
+                  confirmDestructive(t('confirm.cancelTitle'), t('confirm.cancelBody'), t('confirm.cancelYes'), t('confirm.keep'), c.cancel)
+                }
+              />
             )}
             <Button variant="ghost" label={t('order.help')} onPress={c.callShop} />
             {placed && <Button variant="ghost" label={t('order.backHome')} onPress={c.goHome} />}

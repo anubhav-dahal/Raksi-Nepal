@@ -13,7 +13,8 @@ import { useAsync } from './useAsync';
 const ACTIVE: OrderStatus[] = ['pending', 'confirmed', 'preparing', 'out_for_delivery'];
 const POLL_MS = 15_000;
 
-const withAuth = async <T>(fn: (token: string) => Promise<T>): Promise<T> => {
+/** Runs an API call with the saved token; logs out if the server rejects it. */
+export const withAuth = async <T>(fn: (token: string) => Promise<T>): Promise<T> => {
   const token = useAuthStore.getState().token;
   if (!token) throw new Error('Not logged in');
   try {

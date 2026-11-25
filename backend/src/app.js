@@ -5,10 +5,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { env } from './config/env.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
+import AdminRouter from './routes/AdminRouter.js';
 import CategoryRouter from './routes/CategoryRouter.js';
 import OrderRouter from './routes/OrderRouter.js';
 import PaymentRouter from './routes/PaymentRouter.js';
 import ProductRouter from './routes/ProductRouter.js';
+import RiderRouter from './routes/RiderRouter.js';
 import UserRouter from './routes/UserRouter.js';
 
 const publicDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'public');
@@ -33,6 +35,8 @@ app.use('/api/products', ProductRouter);
 app.use('/api/users', UserRouter);
 app.use('/api/orders', OrderRouter);
 app.use('/api/payments', PaymentRouter);
+app.use('/api/admin', AdminRouter);
+app.use('/api/rider', RiderRouter);
 
 app.use(notFound);
 app.use(errorHandler);
