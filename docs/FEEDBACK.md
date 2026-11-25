@@ -75,6 +75,48 @@ Bigger work should also get a GitHub issue. Put the issue number in the entry.
 
 ## Done
 
+### FB-024: Remove the arrow icon from the category grid
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P2 · **Area:** design
+- **Status:** Done, in `feat/phase-6-operations` (commit `23cfcfc`)
+
+### FB-025: One admin account, using the normal login
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P0 · **Area:** admin
+- **Status:** Done, in `feat/phase-6-operations` (commit `23cfcfc`)
+- **Fix:** The admin is set by `ADMIN_PHONE` / `ADMIN_PASSWORD` on the backend, and nobody else can become admin. Logging in with it opens the shop dashboard. Riders are given their role on the Riders screen.
+
+### FB-026: Admin can create categories and add products, with photos
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P0 · **Area:** admin
+- **Status:** Done, in `feat/phase-6-operations` (commit `23cfcfc`)
+- **Fix:**
+  - Dashboard → Categories: new or edit (photo, name, 18+, visible), with "Add product" inside each category.
+  - Dashboard → Products → New product: category, photo, name, description, sizes (price and stock).
+  - Existing products: change the photo, name, description or category, or add sizes.
+  - Photos upload from the phone.
+
+### FB-027: Use the uploaded beer photo as the logo
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** design
+- **Status:** Done, in `feat/phase-6-operations` (commit `23cfcfc`). Used in the header, login, splash, favicon and app icon.
+
+### FB-028: Too much descriptive text
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** design
+- **Status:** Done, in `feat/phase-6-operations` (commit `23cfcfc`)
+- **Fix:** Removed:
+  - category subtitles and 18+ tags on tiles
+  - splash tagline and location
+  - login/register paragraphs
+  - cart, checkout and order helper sentences
+  - "In stock" badges (only low/sold out is shown now)
+
+### FB-029: Make it ready to deploy
+- **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P0 · **Area:** other
+- **Status:** Done (setup), in `feat/phase-6-operations` (commit `23cfcfc`). See `DEPLOY.md`.
+- **Fix:**
+  - App IDs `com.nepalgunjsips.app`
+  - EAS build profiles
+  - backend Dockerfile with a persistent photo folder
+  - single-admin env setup
+- **Still needed:** an Atlas database, a host for the API, `eas init`, and the real API URL in `eas.json`.
+
 ### FB-017: App looked dull and flat
 - **Reported:** 2026-11-25 by @aakash-develops · **Priority:** P1 · **Area:** design
 - **Status:** Done, in `feat/phase-6-operations` (commit `08fa65a`)
