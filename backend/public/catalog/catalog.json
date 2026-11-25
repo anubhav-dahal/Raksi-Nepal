@@ -1,0 +1,772 @@
+{
+  "categories": [
+    {
+      "name": "Beer",
+      "alcoholic": true,
+      "sortOrder": 1,
+      "cover": "covers/beer.webp"
+    },
+    {
+      "name": "Whiskey",
+      "alcoholic": true,
+      "sortOrder": 2,
+      "cover": "covers/whiskey.webp"
+    },
+    {
+      "name": "Vodka",
+      "alcoholic": true,
+      "sortOrder": 3,
+      "cover": "covers/vodka.webp"
+    },
+    {
+      "name": "Rum",
+      "alcoholic": true,
+      "sortOrder": 4,
+      "cover": "covers/rum.webp"
+    },
+    {
+      "name": "Gin",
+      "alcoholic": true,
+      "sortOrder": 5,
+      "cover": "covers/gin.webp"
+    },
+    {
+      "name": "Wine",
+      "alcoholic": true,
+      "sortOrder": 6,
+      "cover": "covers/wine.webp"
+    },
+    {
+      "name": "Other Drinks",
+      "alcoholic": true,
+      "sortOrder": 7,
+      "cover": "covers/other-drinks.webp"
+    },
+    {
+      "name": "Snack Sets",
+      "alcoholic": false,
+      "sortOrder": 8,
+      "cover": "covers/snack-sets.webp"
+    }
+  ],
+  "products": {
+    "Snack Sets": [
+      {
+        "name": "KK Chicken Snack Set",
+        "size": "95 g",
+        "price": 160,
+        "imageFile": "snack-sets/kk-chicken-snack-set.webp"
+      },
+      {
+        "name": "Buff Snack Set",
+        "size": "155 g",
+        "price": 550,
+        "imageFile": "snack-sets/buff-snack-set.webp"
+      },
+      {
+        "name": "Chicken Snack Set",
+        "size": "155 g",
+        "price": 450,
+        "imageFile": "snack-sets/chicken-snack-set.webp"
+      },
+      {
+        "name": "Pork Snack Set",
+        "size": "155 g",
+        "price": 550,
+        "imageFile": "snack-sets/pork-snack-set.webp"
+      },
+      {
+        "name": "Veg Snack Set",
+        "size": "125 g",
+        "price": 250,
+        "imageFile": "snack-sets/veg-snack-set.webp"
+      }
+    ],
+    "Whiskey": [
+      {
+        "name": "Mustang Gold Whiskey",
+        "size": "375 ml",
+        "price": 600,
+        "imageFile": "whiskey/mustang-gold-whiskey.webp"
+      },
+      {
+        "name": "Black Oak Malt Whiskey",
+        "size": "750 ml",
+        "price": 1400,
+        "imageFile": "whiskey/black-oak-malt-whiskey.webp"
+      },
+      {
+        "name": "Golden Oak Whiskey",
+        "size": "750 ml",
+        "price": 1200,
+        "imageFile": "whiskey/golden-oak-whiskey.webp"
+      },
+      {
+        "name": "Golden Oak Blended Malt Whiskey",
+        "size": "750 ml",
+        "price": 1320,
+        "imageFile": "whiskey/golden-oak-blended-malt-whiskey.webp"
+      },
+      {
+        "name": "Crown Black Oak Whiskey",
+        "size": "750 ml",
+        "price": 1220,
+        "imageFile": "whiskey/crown-black-oak-whiskey.webp"
+      },
+      {
+        "name": "Shlok Whiskey",
+        "size": "750 ml",
+        "price": 2960,
+        "imageFile": "whiskey/shlok-whiskey.webp"
+      },
+      {
+        "name": "Silver Oak Whiskey",
+        "size": "375 ml",
+        "price": 640,
+        "imageFile": "whiskey/silver-oak-whiskey.webp"
+      },
+      {
+        "name": "Silver Oak Whiskey",
+        "size": "750 ml",
+        "price": 1280,
+        "imageFile": "whiskey/silver-oak-whiskey.webp"
+      },
+      {
+        "name": "Golden Oak Blended Malt Whiskey",
+        "size": "375 ml",
+        "price": 660,
+        "imageFile": "whiskey/golden-oak-blended-malt-whiskey.webp"
+      },
+      {
+        "name": "Chivas Regal 12 Whiskey",
+        "size": "1 L",
+        "price": 9600,
+        "imageFile": "whiskey/chivas-regal-12-whiskey.webp"
+      },
+      {
+        "name": "Jameson Whiskey",
+        "size": "1 L",
+        "price": 8000,
+        "imageFile": "whiskey/jameson-whiskey.webp"
+      },
+      {
+        "name": "Jack Daniel's Honey Whiskey",
+        "size": "1 L",
+        "price": 8500,
+        "imageFile": "whiskey/jack-daniels-honey-whiskey.webp"
+      },
+      {
+        "name": "Old Durbar Black Chimney Whiskey",
+        "size": "750 ml",
+        "price": 3970,
+        "imageFile": "whiskey/old-durbar-black-chimney-whiskey.webp"
+      },
+      {
+        "name": "Crown Whiskey",
+        "size": "180 ml",
+        "price": 290,
+        "imageFile": "whiskey/crown-whiskey.webp"
+      },
+      {
+        "name": "Kala Patthar Whiskey",
+        "size": "750 ml",
+        "price": 3060,
+        "imageFile": "whiskey/kala-patthar-whiskey.webp"
+      },
+      {
+        "name": "Mustang Gold Whiskey",
+        "size": "750 ml",
+        "price": 1200,
+        "imageFile": "whiskey/mustang-gold-whiskey-2.webp"
+      },
+      {
+        "name": "Black Oak Malt Whiskey",
+        "size": "180 ml",
+        "price": 360,
+        "imageFile": "whiskey/black-oak-malt-whiskey.webp"
+      },
+      {
+        "name": "Old Durbar Reserve Whiskey",
+        "size": "750 ml",
+        "price": 2775,
+        "imageFile": "whiskey/old-durbar-reserve-whiskey.webp"
+      },
+      {
+        "name": "King's Hill White Whiskey",
+        "size": "750 ml",
+        "price": 875,
+        "imageFile": "whiskey/kings-hill-white-whiskey.webp"
+      },
+      {
+        "name": "Mustang Gold Whiskey",
+        "size": "180 ml",
+        "price": 300,
+        "imageFile": "whiskey/mustang-gold-whiskey-2.webp"
+      },
+      {
+        "name": "Old Durbar Blended Reserve Whiskey",
+        "size": "375 ml",
+        "price": 1525,
+        "imageFile": "whiskey/old-durbar-blended-reserve-whiskey.webp"
+      },
+      {
+        "name": "Kala Patthar Triple Cask Whiskey",
+        "size": "750 ml",
+        "price": 3975,
+        "imageFile": "whiskey/kala-patthar-triple-cask-whiskey.webp"
+      },
+      {
+        "name": "Shlok Whiskey",
+        "size": "750 ml",
+        "price": 2860,
+        "imageFile": "whiskey/shlok-whiskey.webp"
+      },
+      {
+        "name": "Golden Oak Blended Malt Whiskey",
+        "size": "750 ml",
+        "price": 1280,
+        "imageFile": "whiskey/golden-oak-blended-malt-whiskey.webp"
+      },
+      {
+        "name": "Black Oak Whiskey",
+        "size": "180 ml",
+        "price": 370,
+        "imageFile": "whiskey/black-oak-whiskey.webp"
+      },
+      {
+        "name": "Old Durbar Blended Reserve Whiskey",
+        "size": "750 ml",
+        "price": 3050,
+        "imageFile": "whiskey/old-durbar-blended-reserve-whiskey.webp"
+      },
+      {
+        "name": "Johnnie Walker Double Black Whiskey",
+        "size": "750 ml",
+        "price": 7950,
+        "imageFile": "whiskey/johnnie-walker-double-black-whiskey.webp"
+      },
+      {
+        "name": "Johnnie Walker Black Label Whiskey",
+        "size": "750 ml",
+        "price": 6800,
+        "imageFile": "whiskey/johnnie-walker-black-label-whiskey.webp"
+      },
+      {
+        "name": "Johnnie Walker Black Label Whiskey",
+        "size": "375 ml",
+        "price": 3515,
+        "imageFile": "whiskey/johnnie-walker-black-label-whiskey.webp"
+      },
+      {
+        "name": "Johnnie Walker Red Label Whiskey",
+        "size": "750 ml",
+        "price": 5400,
+        "imageFile": "whiskey/johnnie-walker-red-label-whiskey.webp"
+      },
+      {
+        "name": "Crown Whiskey",
+        "size": "750 ml",
+        "price": 1160,
+        "imageFile": "whiskey/crown-whiskey.webp"
+      },
+      {
+        "name": "Golden Oak Blended Malt Whiskey",
+        "size": "180 ml",
+        "price": 320,
+        "imageFile": "whiskey/golden-oak-blended-malt-whiskey.webp"
+      },
+      {
+        "name": "Black Oak Whiskey",
+        "size": "375 ml",
+        "price": 760,
+        "imageFile": "whiskey/black-oak-whiskey-2.webp"
+      },
+      {
+        "name": "Golden Oak Blended Malt Whiskey",
+        "size": "180 ml",
+        "price": 330,
+        "imageFile": "whiskey/golden-oak-blended-malt-whiskey.webp"
+      },
+      {
+        "name": "Ballantine's 12 Whiskey",
+        "size": "1 L",
+        "price": 7200,
+        "imageFile": "whiskey/ballantines-12-whiskey.webp"
+      },
+      {
+        "name": "Black Oak Malt Whiskey",
+        "size": "180 ml",
+        "price": 380,
+        "imageFile": "whiskey/black-oak-malt-whiskey.webp"
+      },
+      {
+        "name": "Shlok Whiskey",
+        "size": "180 ml",
+        "price": 740,
+        "imageFile": "whiskey/shlok-whiskey.webp"
+      },
+      {
+        "name": "Jack Daniel's Whiskey",
+        "size": "1 L",
+        "price": 8800,
+        "imageFile": "whiskey/jack-daniels-whiskey.webp"
+      },
+      {
+        "name": "Jack Daniel's Honey Whiskey",
+        "size": "1 L",
+        "price": 8850,
+        "imageFile": "whiskey/jack-daniels-honey-whiskey-2.webp"
+      }
+    ],
+    "Beer": [
+      {
+        "name": "Carlsberg Beer",
+        "size": "650 ml",
+        "price": 515,
+        "imageFile": "beer/carlsberg-beer.webp"
+      },
+      {
+        "name": "Barahsinghe Pilsner Beer",
+        "size": "330 ml",
+        "price": 225,
+        "imageFile": "beer/barahsinghe-pilsner-beer.webp"
+      },
+      {
+        "name": "Tuborg Gold Can Beer",
+        "size": "500 ml",
+        "price": 340,
+        "imageFile": "beer/tuborg-gold-can-beer.webp"
+      },
+      {
+        "name": "Gorkha Unfiltered Beer",
+        "size": "330 ml",
+        "price": 200,
+        "imageFile": "beer/gorkha-unfiltered-beer.webp"
+      },
+      {
+        "name": "Gorkha Strong Beer",
+        "size": "650 ml",
+        "price": 375,
+        "imageFile": "beer/gorkha-strong-beer.webp"
+      },
+      {
+        "name": "Barahsinghe Pale Ale Beer",
+        "size": "650 ml",
+        "price": 480,
+        "imageFile": "beer/barahsinghe-pale-ale-beer.webp"
+      },
+      {
+        "name": "Barahsinghe Pilsner Beer",
+        "size": "330 ml",
+        "price": 220,
+        "imageFile": "beer/barahsinghe-pilsner-beer.webp"
+      },
+      {
+        "name": "Barahsinghe Pilsner Beer",
+        "size": "500 ml",
+        "price": 340,
+        "imageFile": "beer/barahsinghe-pilsner-beer.webp"
+      },
+      {
+        "name": "Gorkha Unfiltered Beer",
+        "size": "330 ml",
+        "price": 200,
+        "imageFile": "beer/gorkha-unfiltered-beer.webp"
+      },
+      {
+        "name": "Gorkha Extra Strong Beer",
+        "size": "330 ml",
+        "price": 205,
+        "imageFile": "beer/gorkha-extra-strong-beer.webp"
+      },
+      {
+        "name": "Gorkha Strong Can Beer",
+        "size": "500 ml",
+        "price": 295,
+        "imageFile": "beer/gorkha-strong-can-beer.webp"
+      },
+      {
+        "name": "Tuborg Gold Beer",
+        "size": "650 ml",
+        "price": 460,
+        "imageFile": "beer/tuborg-gold-beer.webp"
+      },
+      {
+        "name": "Gorkha Extra Strong Beer",
+        "size": "330 ml",
+        "price": 180,
+        "imageFile": "beer/gorkha-extra-strong-beer.webp"
+      },
+      {
+        "name": "Barahsinghe Hazy IPA Beer",
+        "size": "330 ml",
+        "price": 249,
+        "imageFile": "beer/barahsinghe-hazy-ipa-beer.webp"
+      },
+      {
+        "name": "Barahsinghe Hazy IPA Beer",
+        "size": "650 ml",
+        "price": 490,
+        "imageFile": "beer/barahsinghe-hazy-ipa-beer-2.webp"
+      },
+      {
+        "name": "Barahsinghe Pale Ale Beer",
+        "size": "330 ml",
+        "price": 245,
+        "imageFile": "beer/barahsinghe-pale-ale-beer.webp"
+      },
+      {
+        "name": "Carlsberg Can Beer",
+        "size": "500 ml",
+        "price": 410,
+        "imageFile": "beer/carlsberg-can-beer.webp"
+      },
+      {
+        "name": "Thamel Lager Beer",
+        "size": "650 ml",
+        "price": 450,
+        "imageFile": "beer/thamel-lager-beer.webp"
+      },
+      {
+        "name": "Nepal Ice Strong Beer",
+        "size": "650 ml",
+        "price": 370,
+        "imageFile": "beer/nepal-ice-strong-beer.webp"
+      },
+      {
+        "name": "Nepal Ice Strong Can Beer",
+        "size": "500 ml",
+        "price": 290,
+        "imageFile": "beer/nepal-ice-strong-can-beer.webp"
+      },
+      {
+        "name": "Nepal Ice Extra Strong Beer",
+        "size": "330 ml",
+        "price": 195,
+        "imageFile": "beer/nepal-ice-extra-strong-beer.webp"
+      },
+      {
+        "name": "Barahsinghe Pilsner Beer",
+        "size": "650 ml",
+        "price": 435,
+        "imageFile": "beer/barahsinghe-pilsner-beer.webp"
+      },
+      {
+        "name": "Thamel Lager Beer",
+        "size": "330 ml",
+        "price": 230,
+        "imageFile": "beer/thamel-lager-beer-2.webp"
+      }
+    ],
+    "Gin": [
+      {
+        "name": "Blue Diamond Dry Gin",
+        "size": "180 ml",
+        "price": 315,
+        "imageFile": "gin/blue-diamond-dry-gin.webp"
+      },
+      {
+        "name": "Blue Diamond Dry Gin",
+        "size": "750 ml",
+        "price": 1260,
+        "imageFile": "gin/blue-diamond-dry-gin.webp"
+      },
+      {
+        "name": "Beefeater Gin",
+        "size": "750 ml",
+        "price": 5575,
+        "imageFile": "gin/beefeater-gin.webp"
+      },
+      {
+        "name": "Blue Diamond Gin",
+        "size": "750 ml",
+        "price": 1300,
+        "imageFile": "gin/blue-diamond-gin.webp"
+      },
+      {
+        "name": "Gordon's Gin",
+        "size": "1 L",
+        "price": 6750,
+        "imageFile": "gin/gordons-gin.webp"
+      }
+    ],
+    "Vodka": [
+      {
+        "name": "8848 Vodka",
+        "size": "750 ml",
+        "price": 2145,
+        "imageFile": "vodka/8848-vodka.webp"
+      },
+      {
+        "name": "Yeti Vodka",
+        "size": "750 ml",
+        "price": 2300,
+        "imageFile": "vodka/yeti-vodka.webp"
+      },
+      {
+        "name": "Absolut Vodka",
+        "size": "1 L",
+        "price": 7050,
+        "imageFile": "vodka/absolut-vodka.webp"
+      },
+      {
+        "name": "Absolut Vodka",
+        "size": "500 ml",
+        "price": 3700,
+        "imageFile": "vodka/absolut-vodka.webp"
+      },
+      {
+        "name": "8848 Vodka",
+        "size": "375 ml",
+        "price": 1188,
+        "imageFile": "vodka/8848-vodka.webp"
+      },
+      {
+        "name": "Ruslan Vodka",
+        "size": "180 ml",
+        "price": 595,
+        "imageFile": "vodka/ruslan-vodka.webp"
+      },
+      {
+        "name": "Highlander Vodka",
+        "size": "180 ml",
+        "price": 285,
+        "imageFile": "vodka/highlander-vodka.webp"
+      },
+      {
+        "name": "Highlander Vodka",
+        "size": "750 ml",
+        "price": 1140,
+        "imageFile": "vodka/highlander-vodka.webp"
+      },
+      {
+        "name": "Yeti Vodka",
+        "size": "180 ml",
+        "price": 580,
+        "imageFile": "vodka/yeti-vodka.webp"
+      },
+      {
+        "name": "Ciroc Vodka",
+        "size": "750 ml",
+        "price": 7900,
+        "imageFile": "vodka/ciroc-vodka.webp"
+      },
+      {
+        "name": "Ruslan Vodka",
+        "size": "750 ml",
+        "price": 2380,
+        "imageFile": "vodka/ruslan-vodka.webp"
+      },
+      {
+        "name": "Nude Vodka",
+        "size": "750 ml",
+        "price": 2375,
+        "imageFile": "vodka/nude-vodka.webp"
+      },
+      {
+        "name": "Nude Vodka",
+        "size": "180 ml",
+        "price": 594,
+        "imageFile": "vodka/nude-vodka.webp"
+      }
+    ],
+    "Other Drinks": [
+      {
+        "name": "Passion Cooler",
+        "size": "275 ml",
+        "price": 200,
+        "imageFile": "other-drinks/passion-cooler.webp"
+      },
+      {
+        "name": "Ruslan Lemon Iced Tea",
+        "size": "275 ml",
+        "price": 225,
+        "imageFile": "other-drinks/ruslan-lemon-iced-tea.webp"
+      },
+      {
+        "name": "Ruslan Peach Iced Tea",
+        "size": "275 ml",
+        "price": 225,
+        "imageFile": "other-drinks/ruslan-peach-iced-tea.webp"
+      }
+    ],
+    "Rum": [
+      {
+        "name": "Old Monk XXX Rum",
+        "size": "750 ml",
+        "price": 2000,
+        "imageFile": "rum/old-monk-xxx-rum.webp"
+      },
+      {
+        "name": "Old Monk XXX Rum",
+        "size": "375 ml",
+        "price": 1000,
+        "imageFile": "rum/old-monk-xxx-rum.webp"
+      },
+      {
+        "name": "Old Monk XXX Rum",
+        "size": "180 ml",
+        "price": 525,
+        "imageFile": "rum/old-monk-xxx-rum-2.webp"
+      },
+      {
+        "name": "Khukri XXX Rum",
+        "size": "750 ml",
+        "price": 2300,
+        "imageFile": "rum/khukri-xxx-rum.webp"
+      },
+      {
+        "name": "Khukri XXX Rum",
+        "size": "375 ml",
+        "price": 1150,
+        "imageFile": "rum/khukri-xxx-rum.webp"
+      },
+      {
+        "name": "Khukri XXX Rum",
+        "size": "180 ml",
+        "price": 575,
+        "imageFile": "rum/khukri-xxx-rum.webp"
+      }
+    ],
+    "Wine": [
+      {
+        "name": "Big Master Fruit Red Wine",
+        "size": "750 ml",
+        "price": 865,
+        "imageFile": null
+      },
+      {
+        "name": "Roche Mazet Cabernet Wine",
+        "size": "750 ml",
+        "price": 2150,
+        "imageFile": null
+      },
+      {
+        "name": "Roche Mazet Merlot Wine",
+        "size": "750 ml",
+        "price": 2150,
+        "imageFile": null
+      },
+      {
+        "name": "Chapel Sweet White Wine",
+        "size": "750 ml",
+        "price": 1600,
+        "imageFile": null
+      },
+      {
+        "name": "Robertson Sweet Red Wine",
+        "size": "750 ml",
+        "price": 1750,
+        "imageFile": null
+      },
+      {
+        "name": "Chapel Sweet Red Wine",
+        "size": "750 ml",
+        "price": 1600,
+        "imageFile": null
+      },
+      {
+        "name": "Big Master White Wine",
+        "size": "750 ml",
+        "price": 950,
+        "imageFile": null
+      },
+      {
+        "name": "Nesy Sweet White Wine",
+        "size": "750 ml",
+        "price": 875,
+        "imageFile": null
+      },
+      {
+        "name": "Big Master Fruit White Wine",
+        "size": "750 ml",
+        "price": 865,
+        "imageFile": null
+      },
+      {
+        "name": "Big Master Red Wine",
+        "size": "750 ml",
+        "price": 950,
+        "imageFile": null
+      },
+      {
+        "name": "Nesy Sweet Red Wine",
+        "size": "750 ml",
+        "price": 875,
+        "imageFile": null
+      },
+      {
+        "name": "Nesy Fruit White Wine",
+        "size": "750 ml",
+        "price": 1025,
+        "imageFile": null
+      },
+      {
+        "name": "Manang Valley Dry Wine",
+        "size": "750 ml",
+        "price": 1295,
+        "imageFile": null
+      },
+      {
+        "name": "Jacob's Creek Merlot Wine",
+        "size": "750 ml",
+        "price": 2200,
+        "imageFile": null
+      },
+      {
+        "name": "Jacob's Creek Chardonnay Wine",
+        "size": "750 ml",
+        "price": 3300,
+        "imageFile": null
+      },
+      {
+        "name": "Jacob's Creek Merlot Wine",
+        "size": "750 ml",
+        "price": 2250,
+        "imageFile": null
+      },
+      {
+        "name": "Robertson Sweet White Wine",
+        "size": "750 ml",
+        "price": 1835,
+        "imageFile": null
+      },
+      {
+        "name": "Robertson Natural Sweet Red Wine",
+        "size": "750 ml",
+        "price": 1835,
+        "imageFile": null
+      },
+      {
+        "name": "Jacob's Creek Merlot Wine",
+        "size": "750 ml",
+        "price": 2350,
+        "imageFile": null
+      },
+      {
+        "name": "Manang Valley Sweet Wine",
+        "size": "750 ml",
+        "price": 1079,
+        "imageFile": null
+      },
+      {
+        "name": "Manang Valley Semi Sweet Wine",
+        "size": "750 ml",
+        "price": 1079,
+        "imageFile": null
+      },
+      {
+        "name": "Manang Valley Rose Wine",
+        "size": "750 ml",
+        "price": 1295,
+        "imageFile": null
+      },
+      {
+        "name": "Prince Laurent Champagne",
+        "size": "750 ml",
+        "price": 6800,
+        "imageFile": null
+      }
+    ]
+  }
+}

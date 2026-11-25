@@ -28,3 +28,6 @@ desktop.ini
 scripts/
 .md
 .vscode
+# Raw source data (not pushed); the cleaned copy lives in backend/public/catalog
+beverage-data/
+beverage-data-simple/

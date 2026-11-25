@@ -3,3 +3,91 @@
 @import "tailwindcss/utilities.css";
 
 @import "nativewind/theme";
+
+/*
+ * Design tokens (issue #21)
+ * Source of truth: Color-system-specification.md + the Excalidraw/prototype design.
+ * Tailwind v4 is CSS-first, so tokens live here in @theme instead of tailwind.config.js.
+ * Use the semantic classes (bg-bg, bg-card, text-text, text-muted, bg-accent, ...),
+ * never raw hex values in components.
+ */
+
+/* Raw palette. Dark is the default theme; light applies when the device is in light mode. */
+:root {
+  --bg: #0b132b;
+  --card: #1c2541;
+  --card-2: #233055;
+  --text: #f8f9fa;
+  --muted: #8d99ae;
+  --accent: #21b8a6;
+  --accent-dark: #087f73;
+  --border: rgba(255, 255, 255, 0.08);
+  --shadow: 0 18px 46px rgba(0, 0, 0, 0.35);
+
+  @media (prefers-color-scheme: light) {
+    --bg: #f7f9fa;
+    --card: #ffffff;
+    --card-2: #edf3f3;
+    --text: #18252d;
+    --muted: #687981;
+    --accent: #087f73;
+    --accent-dark: #06695f;
+    --border: rgba(24, 37, 45, 0.09);
+    --shadow: 0 16px 42px rgba(18, 54, 58, 0.1);
+  }
+}
+
+/* Theme-aware tokens: utilities point at the variables above, so they follow light/dark. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-card-2: var(--card-2);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-dark: var(--accent-dark);
+  --color-border: var(--border);
+
+  --shadow-card: var(--shadow);
+}
+
+@theme {
+  /* Semantic status colours (same in both themes) */
+  --color-success: #2ec4b6;
+  --color-warning: #ff8800;
+  --color-error: #e63946;
+  --color-on-accent: #ffffff;
+
+  /* Fonts: names match the families loaded in App.tsx (@expo-google-fonts) */
+  --font-display: "Manrope_800ExtraBold";
+  --font-heading: "Manrope_700Bold";
+  --font-body: "DMSans_400Regular";
+  --font-body-medium: "DMSans_500Medium";
+  --font-body-semibold: "DMSans_600SemiBold";
+  --font-body-bold: "DMSans_700Bold";
+
+  /* Type scale (px values taken from the prototype) */
+  --text-micro: 9px;
+  --text-caption: 10px;
+  --text-label: 11px;
+  --text-body: 13px;
+  --text-title: 18px;
+  --text-heading: 23px;
+  --text-hero: 30px;
+  --text-display: 43px;
+
+  /* Spacing: Tailwind's 4px base step (p-1 = 4px, p-4 = 16px) plus named layout steps */
+  --spacing: 4px;
+  --spacing-gutter: 16px;
+  --spacing-section: 22px;
+  --spacing-control: 50px;
+
+  /* Radius */
+  --radius-xs: 4px;
+  --radius-sm: 9px;
+  --radius-md: 14px;
+  --radius-lg: 16px;
+  --radius-xl: 21px;
+  --radius-2xl: 28px;
+  --radius-pill: 999px;
+}
