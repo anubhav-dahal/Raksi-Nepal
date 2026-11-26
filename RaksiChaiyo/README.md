@@ -20,6 +20,21 @@ If the phone shows "Cannot reach the server", check that Windows Firewall allows
 | `npx expo start` | Dev server |
 | `npm run typecheck` | TypeScript check (CI runs this) |
 | `npm test` | Unit tests (Node test runner) |
+| `npm run build:local` | Release APK built on this PC, saved to `../builds/android/` |
+
+## Local APK builds and in-app updates
+
+`npm run build:local` builds a release APK on this PC with no EAS account needed. It runs `expo prebuild` and then Gradle; `eas build --local` itself doesn't run on Windows. Each run:
+
+1. bumps `version` (patch) and `android.versionCode` (+1) in `app.json`, and undoes the bump if the build fails;
+2. bakes in the backend address: this PC's Wi-Fi IP on port 5000, or `--api-url` / `EXPO_PUBLIC_API_URL`;
+3. saves `builds/android/v<version>-b<code>/NepalgunjSips-v<version>-b<code>.apk` plus a `build.json`, and updates `builds/android/latest.json`.
+
+While the backend runs, it serves that folder. Phones with an older build show an **Update available** prompt when the app opens or comes back to the front. **Update now** downloads the new APK; tap it to install over the old one. For the first install, open `http://<PC IP>:5000/downloads/android/latest.apk` on the phone.
+
+Options: `--minor`, `--major`, `--no-bump`, `--notes "What's new"`, `--required` (the prompt has no "Later" button), `--api-url http://192.168.1.10:5000`, `--clean`.
+
+Needs JDK 17+ (17 or 21 is safest) and the Android SDK; installing Android Studio provides both. Builds are signed with the template's debug key, which is the same on every build, so updates install over each other. Use EAS or your own keystore for the Play Store.
 
 ## Structure (MVC)
 

@@ -47,7 +47,8 @@
           "cameraPermission": false,
           "microphonePermission": false
         }
-      ]
+      ],
+      "./plugins/withLocalBuild"
     ],
     "scheme": "nepalgunjsips",
     "backgroundColor": "#0b132b",

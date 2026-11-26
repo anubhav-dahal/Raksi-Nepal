@@ -22,6 +22,8 @@ const schema = z.object({
     // Where admin-uploaded images are saved. Served at /static/uploads.
     // In production, point this at a persistent disk/volume.
     UPLOAD_DIR: z.string().optional(),
+    // Folder with the app's local builds (npm run build:local). Default: <repo>/builds.
+    APP_BUILDS_DIR: z.string().optional(),
     // eSewa ePay v2. Defaults are eSewa's public sandbox (test money only).
     ESEWA_PRODUCT_CODE: z.string().default('EPAYTEST'),
     ESEWA_SECRET_KEY: z.string().default('8gBm/:&EnhH.1/q'),
