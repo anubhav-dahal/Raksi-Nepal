@@ -6,6 +6,7 @@ import app from './app.js';
 import { env } from './config/env.js';
 import { connectDB, isMemoryDB } from './config/db.js';
 import { seedDatabase } from './seed/seedDatabase.js';
+import { printAppBuildBanner } from './utils/appBuildBanner.js';
 import { DEMO_STAFF, seedAdminFromEnv, seedDevStaff } from './seed/staff.js';
 
 const startServer = async () => {
@@ -28,6 +29,7 @@ const startServer = async () => {
     // 0.0.0.0 so a phone on the same Wi-Fi can reach the API.
     app.listen(env.PORT, '0.0.0.0', () => {
         console.log(`Server running in ${env.NODE_ENV} mode on port ${env.PORT}`);
+        printAppBuildBanner(env.PORT, env.PUBLIC_URL);
     });
 };
 

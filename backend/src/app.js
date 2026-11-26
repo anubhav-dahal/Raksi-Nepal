@@ -6,7 +6,9 @@ import { fileURLToPath } from 'node:url';
 import { env } from './config/env.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { UPLOAD_DIR } from './middleware/upload.js';
+import { BUILDS_DIR, downloadLatestApk } from './controllers/appVersionController.js';
 import AdminRouter from './routes/AdminRouter.js';
+import AppRouter from './routes/AppRouter.js';
 import CategoryRouter from './routes/CategoryRouter.js';
 import OrderRouter from './routes/OrderRouter.js';
 import PaymentRouter from './routes/PaymentRouter.js';
@@ -27,6 +29,10 @@ app.use(express.json({ limit: '100kb' }));
 app.use('/static/uploads', express.static(UPLOAD_DIR, { maxAge: '30d', immutable: true }));
 app.use('/static', express.static(publicDir, { maxAge: '7d' }));
 
+// Local app builds (npm run build:local): APKs for sideloading and the in-app update prompt.
+app.get('/downloads/android/latest.apk', downloadLatestApk);
+app.use('/downloads', express.static(BUILDS_DIR, { index: false, dotfiles: 'deny' }));
+
 // Health Check Route
 app.get('/api/health', (req, res) => {
     res.status(200).json({ status: 'OK', message: 'Raksi Nepal API is active' });
@@ -38,6 +44,7 @@ app.use('/api/users', UserRouter);
 app.use('/api/orders', OrderRouter);
 app.use('/api/payments', PaymentRouter);
 app.use('/api/admin', AdminRouter);
+app.use('/api/app', AppRouter);
 app.use('/api/rider', RiderRouter);
 
 app.use(notFound);

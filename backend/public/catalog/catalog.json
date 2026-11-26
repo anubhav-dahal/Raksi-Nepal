@@ -633,139 +633,139 @@
         "name": "Big Master Fruit Red Wine",
         "size": "750 ml",
         "price": 865,
-        "imageFile": null
+        "imageFile": "wine/big-master-fruit-red-wine.webp"
       },
       {
         "name": "Roche Mazet Cabernet Wine",
         "size": "750 ml",
         "price": 2150,
-        "imageFile": null
+        "imageFile": "wine/roche-mazet-cabernet-wine.webp"
       },
       {
         "name": "Roche Mazet Merlot Wine",
         "size": "750 ml",
         "price": 2150,
-        "imageFile": null
+        "imageFile": "wine/roche-mazet-merlot-wine.webp"
       },
       {
         "name": "Chapel Sweet White Wine",
         "size": "750 ml",
         "price": 1600,
-        "imageFile": null
+        "imageFile": "wine/chapel-sweet-white-wine.webp"
       },
       {
         "name": "Robertson Sweet Red Wine",
         "size": "750 ml",
         "price": 1750,
-        "imageFile": null
+        "imageFile": "wine/robertson-sweet-red-wine.webp"
       },
       {
         "name": "Chapel Sweet Red Wine",
         "size": "750 ml",
         "price": 1600,
-        "imageFile": null
+        "imageFile": "wine/chapel-sweet-red-wine.webp"
       },
       {
         "name": "Big Master White Wine",
         "size": "750 ml",
         "price": 950,
-        "imageFile": null
+        "imageFile": "wine/big-master-white-wine.webp"
       },
       {
         "name": "Nesy Sweet White Wine",
         "size": "750 ml",
         "price": 875,
-        "imageFile": null
+        "imageFile": "wine/nesy-sweet-white-wine.webp"
       },
       {
         "name": "Big Master Fruit White Wine",
         "size": "750 ml",
         "price": 865,
-        "imageFile": null
+        "imageFile": "wine/big-master-fruit-white-wine.webp"
       },
       {
         "name": "Big Master Red Wine",
         "size": "750 ml",
         "price": 950,
-        "imageFile": null
+        "imageFile": "wine/big-master-red-wine.webp"
       },
       {
         "name": "Nesy Sweet Red Wine",
         "size": "750 ml",
         "price": 875,
-        "imageFile": null
+        "imageFile": "wine/nesy-sweet-red-wine.webp"
       },
       {
         "name": "Nesy Fruit White Wine",
         "size": "750 ml",
         "price": 1025,
-        "imageFile": null
+        "imageFile": "wine/nesy-fruit-white-wine.webp"
       },
       {
         "name": "Manang Valley Dry Wine",
         "size": "750 ml",
         "price": 1295,
-        "imageFile": null
+        "imageFile": "wine/manang-valley-dry-wine.webp"
       },
       {
         "name": "Jacob's Creek Merlot Wine",
         "size": "750 ml",
         "price": 2200,
-        "imageFile": null
+        "imageFile": "wine/jacobs-creek-merlot-wine.webp"
       },
       {
         "name": "Jacob's Creek Chardonnay Wine",
         "size": "750 ml",
         "price": 3300,
-        "imageFile": null
+        "imageFile": "wine/jacobs-creek-chardonnay-wine.webp"
       },
       {
         "name": "Jacob's Creek Merlot Wine",
         "size": "750 ml",
         "price": 2250,
-        "imageFile": null
+        "imageFile": "wine/jacobs-creek-merlot-wine.webp"
       },
       {
         "name": "Robertson Sweet White Wine",
         "size": "750 ml",
         "price": 1835,
-        "imageFile": null
+        "imageFile": "wine/robertson-sweet-white-wine.webp"
       },
       {
         "name": "Robertson Natural Sweet Red Wine",
         "size": "750 ml",
         "price": 1835,
-        "imageFile": null
+        "imageFile": "wine/robertson-natural-sweet-red-wine.webp"
       },
       {
         "name": "Jacob's Creek Merlot Wine",
         "size": "750 ml",
         "price": 2350,
-        "imageFile": null
+        "imageFile": "wine/jacobs-creek-merlot-wine.webp"
       },
       {
         "name": "Manang Valley Sweet Wine",
         "size": "750 ml",
         "price": 1079,
-        "imageFile": null
+        "imageFile": "wine/manang-valley-sweet-wine.webp"
       },
       {
         "name": "Manang Valley Semi Sweet Wine",
         "size": "750 ml",
         "price": 1079,
-        "imageFile": null
+        "imageFile": "wine/manang-valley-semi-sweet-wine.webp"
       },
       {
         "name": "Manang Valley Rose Wine",
         "size": "750 ml",
         "price": 1295,
-        "imageFile": null
+        "imageFile": "wine/manang-valley-rose-wine.webp"
       },
       {
         "name": "Prince Laurent Champagne",
         "size": "750 ml",
         "price": 6800,
-        "imageFile": null
+        "imageFile": "wine/prince-laurent-champagne.webp"
       }
     ]
   }

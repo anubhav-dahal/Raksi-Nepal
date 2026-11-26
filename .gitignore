@@ -31,3 +31,6 @@ scripts/
 # Raw source data (not pushed); the cleaned copy lives in backend/public/catalog
 beverage-data/
 beverage-data-simple/
+
+# --- Local app builds (npm run build:local) -----------------
+builds/

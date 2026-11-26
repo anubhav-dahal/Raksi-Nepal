@@ -51,7 +51,9 @@
     "web": "expo start --web",
     "doctor": "npx expo-doctor",
     "typecheck": "tsc --noEmit",
-    "test": "node --test \"src/**/*.test.ts\""
+    "test": "node --test \"src/**/*.test.ts\"",
+    "build:local": "node tools/build-local.mjs",
+    "setup:android": "node tools/setup-android.mjs"
   },
   "private": true,
   "overrides": {

@@ -13,6 +13,11 @@ export const en = {
   'common.cancel': 'Cancel',
   'common.save': 'Save',
 
+  'update.title': 'Update available',
+  'update.message': 'Version {version} of Nepalgunj Sips is ready. Download it, then tap the file to install.',
+  'update.install': 'Update now',
+  'update.later': 'Later',
+
   'home.eyebrow': 'DELIVERED IN NEPALGUNJ',
   'home.title': 'What are you\nsipping today?',
   'home.deliveryPill': '25–40 min',

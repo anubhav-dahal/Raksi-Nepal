@@ -12,4 +12,8 @@ export const ne: Partial<Record<StringKey, string>> = {
   'product.buyNow': 'अहिले किन्नुहोस्',
   'cart.title': 'तपाईंको कार्ट',
   'cart.checkout': 'चेकआउट',
+  'update.title': 'नयाँ अपडेट उपलब्ध छ',
+  'update.message': 'नेपालगञ्ज सिप्सको संस्करण {version} तयार छ। डाउनलोड गरेर फाइल थिच्नुहोस् र इन्स्टल गर्नुहोस्।',
+  'update.install': 'अहिले अपडेट गर्नुहोस्',
+  'update.later': 'पछि',
 };

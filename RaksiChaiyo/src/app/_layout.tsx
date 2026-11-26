@@ -15,6 +15,7 @@ import { useColorScheme, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { usePushNotifications } from '../controllers/pushController';
 import { useApplyTheme } from '../controllers/themeController';
+import { useUpdateCheck } from '../controllers/updateController';
 import { useAuthStore } from '../models/stores/authStore';
 import { ToastHost } from '../views/components/ToastHost';
 import { SplashView } from '../views/screens/SplashView';
@@ -36,6 +37,7 @@ export default function RootLayout() {
   });
   useApplyTheme();
   usePushNotifications();
+  useUpdateCheck();
   const authHydrated = useAuthStore((s) => s.hydrated);
   const [waitedTooLong, setWaitedTooLong] = useState(false);
   const fontsReady = fontsLoaded || !!fontError;

@@ -1,6 +1,6 @@
 # Shop catalogue
 
-The starter products of Nepalgunj Sips: 8 categories and 80 products (107 sizes). Prices are in whole NPR. The backend serves this folder at `/static/catalog/...`, and `npm run seed` loads it into the database.
+The starter products of Nepalgunj Sips: 8 categories and 80 products (107 sizes), every one with a photo. Prices are in whole NPR. The backend serves this folder at `/static/catalog/...`, and `npm run seed` loads it into the database.
 
 | File | What it is |
 | :-- | :-- |
@@ -29,5 +29,3 @@ These sizes are listed twice at different prices. The app uses the first price. 
 | Black Oak Malt Whiskey | 180 ml | 360 | 380 |
 | Jack Daniel's Honey Whiskey | 1 L | 8500 | 8850 |
 | Jacob's Creek Merlot Wine | 750 ml | 2200 | 2250, 2350 |
-
-**Wine has no product photos yet.** The source only had a placeholder image for wine, so those images weren't included. The app shows a neat placeholder until the admin uploads real wine photos.
