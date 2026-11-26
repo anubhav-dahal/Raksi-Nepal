@@ -146,7 +146,13 @@ try {
 
   if (fresh) {
     step('Generating the native Android project (expo prebuild)');
-    run('npx', ['expo', 'prebuild', '--platform', 'android', '--no-install', '--clean'], { cwd: appDir, env: buildEnv, shell: isWindows });
+    // Prebuild rewrites the "android"/"ios" scripts in package.json to `expo run:*`: keep ours.
+    const packageJson = fs.readFileSync(path.join(appDir, 'package.json'), 'utf8');
+    try {
+      run('npx', ['expo', 'prebuild', '--platform', 'android', '--no-install', '--clean'], { cwd: appDir, env: buildEnv, shell: isWindows });
+    } finally {
+      fs.writeFileSync(path.join(appDir, 'package.json'), packageJson);
+    }
     patch(gradleFile, [
       // React Native's generated C++ has paths over 260 characters: CMake 3.31's ninja handles them, the default 3.22 stops.
       // Release lint checks are for store builds: skipped (about a minute).
@@ -163,6 +169,13 @@ try {
   } else {
     step('Settings and libraries unchanged: keeping android/ and its compiled parts');
   }
+  // The SDK, and CMake 3.31 for EVERY native module (react-native-worklets etc. too, not only the app):
+  // its ninja handles Windows paths over 260 characters; 3.22's stops with "mkdir ... No such file or directory".
+  const cmake = path.join(tools.sdk, 'cmake', '3.31.6');
+  if (!fs.existsSync(cmake)) throw new Error(`CMake 3.31.6 is missing from ${tools.sdk}: run npm run setup:android`);
+  const slash = (p) => p.replaceAll('\\', '/');
+  fs.writeFileSync(path.join(androidDir, 'local.properties'), `sdk.dir=${slash(tools.sdk)}\ncmake.dir=${slash(cmake)}\n`);
+
   // Version from app.json (prebuild is skipped when only the version changed).
   patch(gradleFile, [
     [/versionCode \d+/, `versionCode ${versionCode}`],
