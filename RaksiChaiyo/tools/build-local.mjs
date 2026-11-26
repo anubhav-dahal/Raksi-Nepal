@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // Local Android release build: `npm run build:local`
+// (run `npm run setup:android` once first: it sets up this app's own JDK 17 + Android SDK)
 //
 // 1. Bumps the version in app.json (patch by default, versionCode +1 always).
 // 2. Bakes the backend address into the app (your PC's Wi-Fi IP, port 5000).
@@ -16,19 +17,24 @@
 //   --required             the update prompt has no "Later" button
 //   --api-url <url>        backend address (default: EXPO_PUBLIC_API_URL or this PC's LAN IP)
 //   --clean                regenerate the android/ folder from scratch
+//   --all-abis             build for every processor type, not only 64-bit ARM phones
 //
-// Env: BUILDS_DIR (default ../builds), JAVA_HOME, ANDROID_HOME.
+// Env: BUILDS_DIR (default ../builds). JAVA_HOME + ANDROID_HOME (both) to use other tools.
 
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const appDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const androidDir = path.join(appDir, 'android');
 const appJsonPath = path.join(appDir, 'app.json');
 const buildsDir = path.resolve(process.env.BUILDS_DIR ?? path.join(appDir, '..', 'builds'));
 const isWindows = process.platform === 'win32';
+// This app's own tools, from `npm run setup:android`.
+const TOOLS = path.join(os.homedir(), '.nepalgunj-sips-android');
 
 // ---------- arguments ----------
 const args = process.argv.slice(2);
@@ -45,52 +51,13 @@ const fail = (message) => {
 const step = (message) => console.log(`\n▶ ${message}`);
 
 // ---------- toolchain ----------
-const javaMajor = (javaHome) => {
-  const release = path.join(javaHome, 'release');
-  if (!fs.existsSync(release)) return null;
-  const match = fs.readFileSync(release, 'utf8').match(/JAVA_VERSION="(\d+)(?:\.(\d+))?/);
-  if (!match) return null;
-  return match[1] === '1' ? Number(match[2]) : Number(match[1]);
-};
-
-/** A JDK 17+ for Gradle. Prefers 17/21 (what React Native tests with). */
-const findJdk = () => {
-  const candidates = [];
-  if (process.env.JAVA_HOME) candidates.push(process.env.JAVA_HOME);
-  const roots = isWindows
-    ? [
-        'C:/Program Files/Android/Android Studio/jbr',
-        'C:/Program Files/Eclipse Adoptium',
-        'C:/Program Files/Java',
-        'C:/Program Files/Microsoft',
-        'C:/Program Files/Zulu',
-      ]
-    : ['/Applications/Android Studio.app/Contents/jbr/Contents/Home', '/usr/lib/jvm', '/Library/Java/JavaVirtualMachines'];
-  for (const root of roots) {
-    if (!fs.existsSync(root)) continue;
-    if (fs.existsSync(path.join(root, 'release'))) candidates.push(root);
-    for (const entry of fs.readdirSync(root)) {
-      const home = path.join(root, entry);
-      candidates.push(home, path.join(home, 'Contents', 'Home'));
-    }
-  }
-  const jdks = candidates
-    .map((home) => ({ home, major: javaMajor(home) }))
-    .filter((j) => j.major && j.major >= 17 && fs.existsSync(path.join(j.home, 'bin', isWindows ? 'javac.exe' : 'javac')));
-  const rank = (major) => (major === 17 || major === 21 ? 0 : 1);
-  jdks.sort((a, b) => rank(a.major) - rank(b.major) || a.major - b.major);
-  return jdks[0] ?? null;
-};
-
-const findAndroidSdk = () => {
-  const candidates = [
-    process.env.ANDROID_HOME,
-    process.env.ANDROID_SDK_ROOT,
-    isWindows && process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, 'Android', 'Sdk'),
-    path.join(os.homedir(), 'Library', 'Android', 'sdk'),
-    path.join(os.homedir(), 'Android', 'Sdk'),
-  ].filter(Boolean);
-  return candidates.find((dir) => fs.existsSync(path.join(dir, 'platform-tools')) || fs.existsSync(path.join(dir, 'platforms'))) ?? null;
+const findTools = () => {
+  const own = { jdk: path.join(TOOLS, 'jdk17'), sdk: path.join(TOOLS, 'sdk') };
+  const javac = (jdk) => path.join(jdk, 'bin', isWindows ? 'javac.exe' : 'javac');
+  if (fs.existsSync(javac(own.jdk)) && fs.existsSync(path.join(own.sdk, 'platforms'))) return own;
+  const { JAVA_HOME, ANDROID_HOME } = process.env;
+  if (JAVA_HOME && ANDROID_HOME && fs.existsSync(javac(JAVA_HOME))) return { jdk: JAVA_HOME, sdk: ANDROID_HOME };
+  return null;
 };
 
 /** This PC's Wi-Fi/LAN address, so a phone on the same network can reach the backend. */
@@ -103,28 +70,26 @@ const lanIp = () => {
 };
 
 const run = (command, commandArgs, options) => {
-  const result = spawnSync(command, commandArgs, { stdio: 'inherit', shell: isWindows, ...options });
-  if (result.status !== 0) throw new Error(`${command} ${commandArgs.join(' ')} failed (exit ${result.status})`);
+  const result = spawnSync(command, commandArgs, { stdio: 'inherit', ...options });
+  if (result.status !== 0) throw new Error(`${path.basename(command)} ${commandArgs[0] ?? ''} failed (exit ${result.status})`);
+};
+
+/** Edit generated Gradle files; stops if the template changed so a fix is not silently skipped. */
+const patch = (file, edits) => {
+  let text = fs.readFileSync(file, 'utf8');
+  for (const [from, to] of edits) {
+    if (typeof from === 'string' && !text.includes(from)) throw new Error(`${path.basename(file)} changed (looked for "${from.trim().slice(0, 50)}"): update tools/build-local.mjs`);
+    text = text.replace(from, to);
+  }
+  fs.writeFileSync(file, text);
 };
 
 // ---------- preflight ----------
-const jdk = findJdk();
-if (!jdk) {
-  fail(
-    'No JDK 17 or newer found. Install JDK 17 (https://adoptium.net/temurin/releases/?version=17) or Android Studio,\n' +
-      '  or set JAVA_HOME to a JDK 17+ folder.'
-  );
-}
-const sdk = findAndroidSdk();
-if (!sdk) {
-  fail(
-    'Android SDK not found. Install Android Studio (https://developer.android.com/studio), open it once so it\n' +
-      '  downloads the SDK, or set ANDROID_HOME to the SDK folder (usually %LOCALAPPDATA%\\Android\\Sdk).'
-  );
-}
+const tools = findTools();
+if (!tools) fail(`This app's build tools are not set up yet. Run once:  npm run setup:android\n  (installs JDK 17 + the Android SDK in ${TOOLS})`);
 
 const apiUrl = (option('--api-url') ?? process.env.EXPO_PUBLIC_API_URL ?? (lanIp() ? `http://${lanIp()}:5000` : null))?.replace(/\/$/, '');
-if (!apiUrl) fail('Could not detect this PC\'s network address. Pass --api-url http://<ip>:5000');
+if (!apiUrl) fail("Could not detect this PC's network address. Pass --api-url http://<ip>:5000");
 
 // ---------- version bump ----------
 const originalAppJson = fs.readFileSync(appJsonPath, 'utf8');
@@ -133,8 +98,8 @@ const expo = appJson.expo;
 const previous = { version: expo.version, versionCode: expo.android.versionCode ?? 1 };
 
 if (!flag('--no-bump')) {
-  const [major, minor, patch] = expo.version.split('.').map(Number);
-  expo.version = flag('--major') ? `${major + 1}.0.0` : flag('--minor') ? `${major}.${minor + 1}.0` : `${major}.${minor}.${patch + 1}`;
+  const [major, minor, patchNo] = expo.version.split('.').map(Number);
+  expo.version = flag('--major') ? `${major + 1}.0.0` : flag('--minor') ? `${major}.${minor + 1}.0` : `${major}.${minor}.${patchNo + 1}`;
   expo.android.versionCode = previous.versionCode + 1;
   if (expo.ios) expo.ios.buildNumber = String(Number(expo.ios.buildNumber ?? 0) + 1);
   fs.writeFileSync(appJsonPath, JSON.stringify(appJson, null, 2) + '\n');
@@ -147,34 +112,72 @@ console.log(`
 Nepalgunj Sips local build
   version     ${previous.version} (${previous.versionCode}) → ${version} (${versionCode})
   backend     ${apiUrl}
-  JDK         ${jdk.major} (${jdk.home})
-  Android SDK ${sdk}
+  JDK         ${tools.jdk}
+  Android SDK ${tools.sdk}
   output      ${path.join(buildsDir, 'android', tag)}`);
 
 const buildEnv = {
   ...process.env,
-  JAVA_HOME: jdk.home,
-  ANDROID_HOME: sdk,
-  ANDROID_SDK_ROOT: sdk,
-  PATH: `${path.join(jdk.home, 'bin')}${path.delimiter}${process.env.PATH}`,
+  JAVA_HOME: tools.jdk,
+  ANDROID_HOME: tools.sdk,
+  ANDROID_SDK_ROOT: tools.sdk,
   EXPO_PUBLIC_API_URL: apiUrl,
   // Read by plugins/withLocalBuild.js: lets this build talk to the http:// backend.
   LOCAL_BUILD: '1',
   EXPO_NO_GIT_STATUS: '1',
+  CI: '1',
 };
+// JDK first on the search path. Windows names it "Path" (any case), so change that same key.
+const pathKey = Object.keys(buildEnv).find((k) => k.toLowerCase() === 'path') ?? 'PATH';
+buildEnv[pathKey] = `${path.join(tools.jdk, 'bin')}${path.delimiter}${buildEnv[pathKey] ?? ''}`;
 
 const startedAt = Date.now();
 try {
-  const androidDir = path.join(appDir, 'android');
-  step('Generating the native Android project (expo prebuild)');
-  const clean = flag('--clean') || !fs.existsSync(androidDir);
-  run('npx', ['expo', 'prebuild', '--platform', 'android', '--no-install', ...(clean ? ['--clean'] : [])], {
-    cwd: appDir,
-    env: buildEnv,
-  });
+  // Prebuild only when settings or libraries changed: a code-only change keeps android/ and its compiled C++ (minutes, not ten).
+  const fingerprint = createHash('sha256')
+    // app.json without its version numbers, so a version bump alone doesn't regenerate android/.
+    .update(originalAppJson.replace(/"(version|versionCode|buildNumber)": [^,\n]+/g, ''))
+    .update(['package.json', 'package-lock.json'].map((f) => fs.readFileSync(path.join(appDir, f), 'utf8')).join('\n'))
+    .update(fs.readFileSync(fileURLToPath(import.meta.url)))
+    .digest('hex');
+  const stamp = path.join(androidDir, '.build-fingerprint');
+  const fresh = flag('--clean') || !fs.existsSync(stamp) || fs.readFileSync(stamp, 'utf8').trim() !== fingerprint;
+  const gradleFile = path.join(androidDir, 'app', 'build.gradle');
 
-  step('Building the release APK (Gradle). The first build takes a while.');
-  run(isWindows ? 'gradlew.bat' : './gradlew', ['assembleRelease'], { cwd: androidDir, env: buildEnv });
+  if (fresh) {
+    step('Generating the native Android project (expo prebuild)');
+    run('npx', ['expo', 'prebuild', '--platform', 'android', '--no-install', '--clean'], { cwd: appDir, env: buildEnv, shell: isWindows });
+    patch(gradleFile, [
+      // React Native's generated C++ has paths over 260 characters: CMake 3.31's ninja handles them, the default 3.22 stops.
+      // Release lint checks are for store builds: skipped (about a minute).
+      [
+        'android {\n    ndkVersion rootProject.ext.ndkVersion\n',
+        'android {\n    ndkVersion rootProject.ext.ndkVersion\n    externalNativeBuild {\n        cmake {\n            version "3.31.6"\n        }\n    }\n    lint {\n        checkReleaseBuilds false\n    }\n',
+      ],
+    ]);
+    patch(path.join(androidDir, 'gradle.properties'), [
+      [/^org\.gradle\.jvmargs=.*$/m, 'org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=1024m'],
+      [/$/, '\n# added by tools/build-local.mjs (faster local builds)\norg.gradle.caching=true\norg.gradle.daemon.idletimeout=600000\n'],
+    ]);
+    fs.writeFileSync(stamp, fingerprint);
+  } else {
+    step('Settings and libraries unchanged: keeping android/ and its compiled parts');
+  }
+  // Version from app.json (prebuild is skipped when only the version changed).
+  patch(gradleFile, [
+    [/versionCode \d+/, `versionCode ${versionCode}`],
+    [/versionName "[^"]*"/, `versionName "${version}"`],
+  ]);
+
+  // Gradle takes ~4 GB, each parallel job ~0.5 GB, and Windows keeps ~1.5 GB.
+  const freeGB = os.freemem() / 1024 ** 3;
+  const workers = Math.max(2, Math.min(os.cpus().length, Math.floor((freeGB - 4 - 1.5) / 0.5)));
+  step(`Building the release APK (Gradle, ${workers} jobs, ${freeGB.toFixed(1)} GB free). The first build takes 10-20 min.`);
+  // 64-bit ARM only (nearly every Android phone since 2017): about 3x faster.
+  const abis = flag('--all-abis') ? [] : ['-PreactNativeArchitectures=arm64-v8a'];
+  const gradleArgs = ['assembleRelease', ...abis, `--max-workers=${workers}`, '--console=plain'];
+  if (isWindows) run('cmd', ['/c', path.join(androidDir, 'gradlew.bat'), ...gradleArgs], { cwd: androidDir, env: buildEnv });
+  else run('./gradlew', gradleArgs, { cwd: androidDir, env: buildEnv });
 
   const apk = path.join(androidDir, 'app', 'build', 'outputs', 'apk', 'release', 'app-release.apk');
   if (!fs.existsSync(apk)) throw new Error(`Gradle finished but ${apk} is missing`);
@@ -200,7 +203,7 @@ try {
 
   const minutes = ((Date.now() - startedAt) / 60000).toFixed(1);
   console.log(`
-✔ Built ${fileName} in ${minutes} min
+✔ Built ${fileName} (${(info.sizeBytes / 1e6).toFixed(1)} MB) in ${minutes} min
   ${path.join(outDir, fileName)}
 
   Start the backend (cd backend && npm run dev). Phones running an older build
